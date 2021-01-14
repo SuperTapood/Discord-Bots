@@ -1,5 +1,9 @@
 # class used to store constants and other stuff
 
+from functools import cached_property
+from glob import glob
+
+
 class Data:
     __OWNER_IDS = [550555135869190158]
 
@@ -24,5 +28,18 @@ class Data:
     @staticmethod
     def get_guild():
         return Data.__GUILD
+
+    __BOTS = ["Providence"]
+
+    @staticmethod
+    def get_bots():
+        return Data.__BOTS
+
+    @staticmethod
+    def get_help_embeds(master):
+        embeds = {}
+        embeds["Providence"] = master.get_embed()
+        return embeds
+
 
     pass

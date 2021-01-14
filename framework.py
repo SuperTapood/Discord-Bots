@@ -2,18 +2,18 @@ import discord
 
 from exceptions import BotNotNamed, NoTokenFound
 from data import Data
-from discord import Intents
+from discord import Intents, Embed
 
 from discord.ext.commands import Bot
 
 
 class Framework(Bot):
     def __init__(self, name=""):
-        self.PREFIX = "!"
         self.token = ""
         self.guild = None
         self.name = name
         self.callbacks = {}
+        self.cmd_callbacks = {}
         super().__init__(command_prefix="!",
                          owner_ids=Data.get_owners(),
                          intents=Intents.all())
@@ -23,6 +23,11 @@ class Framework(Bot):
         # this function is where the magic happens
         if name not in self.callbacks:
             self.callbacks[name] = callback
+        return
+
+    def set_command_callback(self, cmd, callback):
+        if cmd not in self.cmd_callbacks:
+            self.cmd_callbacks[cmd] = callback
         return
 
     def load_token(self):
@@ -37,7 +42,6 @@ class Framework(Bot):
         return
 
     def setup(self):
-        # this will be overridden with the cogs stuff probably
         pass
 
     def run(self):
@@ -63,6 +67,13 @@ class Framework(Bot):
         await channel.send(msg)
         return
 
+    @staticmethod
+    def extract_cmd(msg):
+        msg = msg[1:].split(" ")
+        cmd = msg[0]
+        ctx = msg[1:]
+        return cmd, "".join(ctx)
+
     # end of helper functions ----------------------------------------------------
 
     # start of callback functions ------------------------------------------------
@@ -83,8 +94,15 @@ class Framework(Bot):
         return
 
     async def on_message(self, message):
-        if "on_message" in self.callbacks:
-            await self.callbacks["on_message"](message)
+        if not message.author.bot:
+            if message.clean_content[0] == "!":
+                cmd, ctx = self.extract_cmd(message.clean_content)
+                if cmd in self.cmd_callbacks:
+                    await self.cmd_callbacks[cmd](ctx, message.channel)
+                else:
+                    await self.send("online log", f"Command {cmd} does not exist")
+            elif "on_message" in self.callbacks:
+                await self.callbacks["on_message"](message)
         return
 
     # end of callback functions -------------------------------------------------
