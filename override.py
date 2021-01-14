@@ -3,7 +3,8 @@ from exceptions import OverrideError
 
 # just so i won't run into problems, the method must be called like this:
 # @override([the class where the function to override is])
-# def foo(*args, **kwargs):..
+# def foo(*args, **kwargs):
+# ...
 
 def override(interface_class):
     # assert im overriding an existing method

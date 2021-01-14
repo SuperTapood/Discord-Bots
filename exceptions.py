@@ -1,3 +1,5 @@
+# all of the custom exceptions that are being used in this project
+
 class OverrideError(Exception):
     # raised when a method cannot be overriden
     # useful for users who didn't spend a million billion
@@ -29,7 +31,7 @@ class BotNotNamed(Exception):
 
 
 class NoTokenFound(Exception):
-    # raised when the framework can't find the token
+    # raised when the framework can't find the token of a bot
 
     __module__ = Exception.__module__
 
