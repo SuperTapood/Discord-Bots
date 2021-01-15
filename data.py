@@ -39,8 +39,9 @@ class Data:
         return Data.__BOTS
 
     @staticmethod
-    def get_help_embeds(master) -> dict:
+    def get_help_embeds(prov) -> dict:
         # gets all of the embeds for the help command from all of the bots
-        return {"Providence": master.get_embed()}
+        # prov is providence, the master bot
+        return {"Providence": prov.get_embed()}
 
     pass

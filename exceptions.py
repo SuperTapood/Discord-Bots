@@ -43,3 +43,18 @@ class NoTokenFound(Exception):
         return f"cannot find token file - {self.name}.token"
 
     pass
+
+
+class ActivityNotFound(Exception):
+    # raised when an unknown activity is called
+
+    __module__ = Exception.__module__
+
+    def __init__(self, activity):
+        self.activity = activity
+        return
+
+    def __str__(self):
+        return f"Activity {self.activity} does not exist"
+
+    pass

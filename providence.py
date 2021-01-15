@@ -3,6 +3,7 @@ from discord import Embed
 from framework import Framework
 from random import randint
 from data import Data
+from override import override
 
 
 class Providence(Framework):
@@ -41,25 +42,22 @@ class Providence(Framework):
                 await self.send(msg.channel, "nice")
         return
 
+    @override(Framework)
+    def setup(self):
+        self.load_extension("provCog")
+        print("ProvCog loaded")
+
+# these are the command placeholders bc i could not be bothered to move this
+# somewhere else. Also moving this will require a redo of the entire help command
+# and i can't be asked
+
     async def help(self, bot, channel):
         """
         provides documentation about all of the commands available for a bot.
         This command takes an optional argument, the bot.
         outputs the help with the provided bot or all of them.
         """
-        if bot == "":
-            # if no bot is provided, display help for all bots
-            await channel.send("No bots supplied. Documentation will be provided for all bots.")
-            embeds = Data.get_help_embeds(self)
-            for key in embeds:
-                await channel.send(embed=embeds[key])
-        elif bot not in Data.get_bots():
-            # if the bot doesn't exist, tell the user
-            await channel.send(f"bot '{bot}' not found!")
-        else:
-            # send out the embed for the proper bot
-            await channel.send(Data.get_help_embeds(self)[bot])
-        return
+        pass
 
     def get_embed(self) -> Embed:
         # the embed method for the help command
@@ -76,9 +74,11 @@ class Providence(Framework):
         # sets presence for the bot
         await self.set_presence("game", "with you peasants")
         # announce thyself
-        chosen = self.one_liners.pop(randint(0, len(self.one_liners) - 1))
-        await self.send("online log", chosen.replace("%", "Providence"))
+        # chosen = self.one_liners.pop(randint(0, len(self.one_liners) - 1))
+        # this starts to get annoying while testing
+        # await self.send("online log", chosen.replace("%", "Providence"))
         # boot up the rest of the boiz
         # empty for now.
         return
+
     pass

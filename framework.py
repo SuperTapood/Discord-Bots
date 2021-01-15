@@ -1,12 +1,13 @@
 # this class is the master class for all bots in the project
+from datetime import datetime
 
 import discord
 
-from exceptions import BotNotNamed, NoTokenFound
+from exceptions import BotNotNamed, NoTokenFound, ActivityNotFound
 from data import Data
-from discord import Intents
+from discord import Intents, Embed
 
-from discord.ext.commands import Bot
+from discord.ext.commands import Bot, CommandNotFound
 
 
 class Framework(Bot):
@@ -75,12 +76,15 @@ class Framework(Bot):
         elif activity_type == "stream":
             activity = discord.Streaming(name=name, url=kwargs["url"])
             await self.change_presence(status=discord.Status.online, activity=activity)
-        # todo: implement the other activities
+        # todo: implement the other activities, find out what the types are
+        else:
+            raise ActivityNotFound(activity_type)
         return
 
     async def send(self, channel, msg):
         # a quick nice helper function to send messages
-        # todo: add a more complex channel system that will support several types
+        # todo: add a more complex channel system that will support
+        #  several types of channels: (int, String, TextChannel)
         channel = self.get_channel(Data.get_channel(channel))
         await channel.send(msg)
         return
@@ -92,6 +96,15 @@ class Framework(Bot):
         cmd = msg[0]
         ctx = msg[1:]
         return cmd, "".join(ctx)
+
+    @staticmethod
+    def generate_embed(title, colour, fields, timestamp=datetime.utcnow(), thumbnail_url=None) -> Embed:
+        embed = Embed(title=title, colour=colour, timestamp=timestamp)
+        for name, value, inline in fields:
+            embed.add_field(name=name, value=value, inline=inline)
+        if thumbnail_url is not None:
+            embed.set_thumbnail(url=thumbnail_url)
+        return embed
 
     # end of helper functions ----------------------------------------------------
 
@@ -120,15 +133,15 @@ class Framework(Bot):
         if not message.author.bot:
             # if the message is a command
             if message.clean_content[0] == "!":
-                cmd, ctx = self.extract_cmd(message.clean_content)
-                if cmd in self.cmd_callbacks:
-                    # invoke the command
-                    await self.cmd_callbacks[cmd](ctx, message.channel)
-                else:
-                    # if the command doesn't exist, report it
-                    await self.send("online log", f"Command {cmd} does not exist")
-            elif "on_message" in self.callbacks:
-                await self.callbacks["on_message"](message)
+                # discord.py will handle this nonsense
+                # todo: add a CommandNotFound try except
+                try:
+                    await self.process_commands(message)  # may raise CommandNotFound
+                except CommandNotFound:
+                    pass
+        elif "on_message" in self.callbacks:
+            # invoke the callback if the message is not a command
+            await self.callbacks["on_message"](message)
         return
 
     # end of callback functions -------------------------------------------------
