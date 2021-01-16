@@ -1,4 +1,5 @@
 # class used to store constants and make them read only
+from random import randint
 
 
 class Data:
@@ -43,5 +44,19 @@ class Data:
         # gets all of the embeds for the help command from all of the bots
         # prov is providence, the master bot
         return {"Providence": prov.get_embed()}
+
+    __one_liners = [
+        "A wild % appeared!",
+        "% reporting for duty!",
+        "% is up and running!",
+        "% is as high as a kite!",
+        "It's a me! %!",
+        "% is as ready as they'll ever be!",
+        "% thinks reading this is not the best use of time",
+    ]
+
+    @staticmethod
+    def get_one_liner() -> str:
+        return Data.__one_liners.pop(randint(0, len(Data.__one_liners) - 1))
 
     pass

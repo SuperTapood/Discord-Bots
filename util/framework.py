@@ -3,8 +3,8 @@ from datetime import datetime
 
 import discord
 
-from exceptions import BotNotNamed, NoTokenFound, ActivityNotFound
-from data import Data
+from util.exceptions import BotNotNamed, NoTokenFound, ActivityNotFound
+from util.data import Data
 from discord import Intents, Embed
 
 from discord.ext.commands import Bot, CommandNotFound

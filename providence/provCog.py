@@ -1,8 +1,9 @@
 from datetime import datetime
 from typing import Optional
 
+from discord import Member
 from discord.ext.commands import Cog, command
-from data import Data
+from util.data import Data
 
 
 class ProvCog(Cog):
@@ -26,13 +27,14 @@ class ProvCog(Cog):
             await ctx.send(f"bot '{cmd}' not found!")
         else:
             # send out the embed for the proper bot
-            await ctx.send(Data.get_help_embeds(self.bot)[cmd])
+            await ctx.send(embed=Data.get_help_embeds(self.bot)[cmd])
         return
 
     @command(name="userinfo")
-    async def get_user_info(self, ctx, target: Optional[str]):
-        target = target or ctx.author
-
+    async def get_user_info(self, ctx, target: Member = None):
+        target = ctx.author if target is None else target
+        # a hint as of why this may break
+        assert type(target) == Member
         fields = [("ID", target.id, False),
                   ("Name", str(target), True),
                   ("Bot?", target.bot, True),
@@ -46,6 +48,7 @@ class ProvCog(Cog):
 
         await ctx.send(embed=embed)
         return
+
     pass
 
 

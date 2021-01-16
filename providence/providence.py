@@ -1,23 +1,13 @@
 from discord import Embed
 
-from framework import Framework
-from random import randint
-from data import Data
-from override import override
+from util.framework import Framework
+from util.override import override
+from util.data import Data
 
 
 class Providence(Framework):
     # one liners that bots will use to report they are ready
     # the % will be replaced with the bots' name
-    one_liners = [
-        "A wild % appeared!",
-        "% reporting for duty!",
-        "% is up and running!",
-        "% is as high as a kite!",
-        "It's a me! %!",
-        "% is as ready as they'll ever be!",
-        "% thinks reading this is not the best use of time",
-    ]
 
     def __init__(self):
         # initialize the superclass first
@@ -47,9 +37,9 @@ class Providence(Framework):
         self.load_extension("provCog")
         print("ProvCog loaded")
 
-# these are the command placeholders bc i could not be bothered to move this
-# somewhere else. Also moving this will require a redo of the entire help command
-# and i can't be asked
+    # these are the command placeholders bc i could not be bothered to move this
+    # somewhere else. Also moving this will require a redo of the entire help command
+    # and i can't be asked
 
     async def help(self, bot, channel):
         """
@@ -74,11 +64,9 @@ class Providence(Framework):
         # sets presence for the bot
         await self.set_presence("game", "with you peasants")
         # announce thyself
-        # chosen = self.one_liners.pop(randint(0, len(self.one_liners) - 1))
+        chosen = Data.get_one_liner()
         # this starts to get annoying while testing
         # await self.send("online log", chosen.replace("%", "Providence"))
-        # boot up the rest of the boiz
-        # empty for now.
         return
 
     pass
