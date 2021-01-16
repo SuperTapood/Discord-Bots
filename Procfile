@@ -1,1 +1,1 @@
-worker: python provMain.py
+worker: python main.py
