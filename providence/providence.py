@@ -34,7 +34,7 @@ class Providence(Framework):
 
     @override(Framework)
     def setup(self):
-        self.load_extension("provCog")
+        self.load_extension("providence.provCog")
         print("ProvCog loaded")
 
     # these are the command placeholders bc i could not be bothered to move this

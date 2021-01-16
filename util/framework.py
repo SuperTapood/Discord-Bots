@@ -42,7 +42,7 @@ class Framework(Bot):
         # loads the token used by this specific bot
         try:
             assert self.name != ""
-            with open(f"{self.name}.token", "r", encoding="utf-8") as file:
+            with open(f"{self.name}/{self.name}.token", "r", encoding="utf-8") as file:
                 self.token = file.read()
         except AssertionError:
             # if this is being raised, no name was given
