@@ -13,7 +13,7 @@ class ProvCog(Cog):
         self.bot.remove_command("help")
         return
 
-    @command(name="help", aliases=["info", "bot"])
+    @command(name="help", aliases=["info"])
     async def show_help(self, ctx, cmd: Optional[str]):
         """displays info on a command"""
         if cmd is None:

@@ -1,13 +1,13 @@
 # Discord-Bots
 
-# Change Log
+## Change Log
 
-## Table of Contents:
+### Table of Contents:
 
 - [Version 0.0.1](#15012021---001)
 - [Version 0.0.2](#18012021---002)
 
-### 18/01/2021 - 0.0.2
+#### 18/01/2021 - 0.0.2
 - [X] &nbsp;&nbsp;
   tidied up the repository
 - [X] &nbsp;&nbsp;
@@ -29,8 +29,10 @@
   about the cause of the bug in the bug report
 - [X] &nbsp;&nbsp;
   all the data class methods are now class methods rather than static methods
+- [X] &nbsp;&nbsp;
+  Jack will no longer raise exceptions when help command is invoked
 
-### 15/01/2021 - 0.0.1
+#### 15/01/2021 - 0.0.1
 
 - [X] &nbsp;&nbsp;
   improved readability of the get help function in the Data module

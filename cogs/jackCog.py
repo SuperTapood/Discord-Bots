@@ -1,4 +1,4 @@
-from discord.ext.commands import Cog
+from discord.ext.commands import Cog, command
 
 
 class JackCog(Cog):
@@ -16,6 +16,12 @@ class JackCog(Cog):
     async def on_member_remove(self, member):
         await self.bot.send("stdout", f"Not leaving, are you {member.mention}?")
         return
+
+    @command(name="help")
+    async def blank(self, *args, **kwargs):
+        # a blank function so that discord won't raise an exception when
+        # trying to invoke non existing commands
+        pass
 
 
 def setup(bot):
