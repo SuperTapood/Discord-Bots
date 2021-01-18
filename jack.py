@@ -11,6 +11,7 @@ class Jack(Framework):
     
     async def ready(self):
         print("JACK!!")
+        await self.set_presence("game", "catch with Ethan")
         chosen = Data.get_one_liner()
         await self.send("online log", chosen.replace("%", self.name))
         return

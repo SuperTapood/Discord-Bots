@@ -84,7 +84,7 @@ class Framework(Bot):
     async def send(self, channel, msg):
         # a quick nice helper function to send messages
         # todo: add a more complex channel system that will support
-        #  several types of channels: (int, String, TextChannel)
+        #  several types of channels: (int, string, TextChannel)
         channel = self.get_channel(Data.get_channel(channel))
         await channel.send(msg)
         return
@@ -150,14 +150,13 @@ class Framework(Bot):
             # if the message is a command
             if message.clean_content[0] == "!":
                 # discord.py will handle this nonsense
-                # todo: add a CommandNotFound try except
                 try:
                     await self.process_commands(message)  # may raise CommandNotFound
                 except CommandNotFound:
                     pass
-        elif "on_message" in self.callbacks:
-            # invoke the callback if the message is not a command
-            await self.callbacks["on_message"](message)
+            elif "on_message" in self.callbacks:
+                # invoke the callback if the message is not a command
+                await self.callbacks["on_message"](message)
         return
 
     # end of callback functions -------------------------------------------------

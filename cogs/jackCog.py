@@ -1,5 +1,7 @@
 from discord.ext.commands import Cog, command
 
+from util.data import Data
+
 
 class JackCog(Cog):
     def __init__(self, bot):
@@ -22,6 +24,13 @@ class JackCog(Cog):
         # a blank function so that discord won't raise an exception when
         # trying to invoke non existing commands
         pass
+
+    @command(name="terminate", aliases=["kill"])
+    async def stop(self, ctx, cmd):
+        if ctx.author.id != Data.get_owners()[0]:
+            ctx.send("Terminating...")
+            quit()
+        return
 
 
 def setup(bot):

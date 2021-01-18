@@ -27,8 +27,8 @@ class Providence(Framework):
         # the on_message callback
         if not msg.author.bot:
             content = msg.clean_content
-            if "69" in content:
-                await self.send(msg.channel, "nice")
+            if "69" in content or "420" in content:
+                await msg.channel.send("nice")
         return
 
     @override(Framework)
