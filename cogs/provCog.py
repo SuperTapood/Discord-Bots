@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional
 
 from discord import Member
-from discord.ext.commands import Cog, command
+from discord.ext.commands import Cog, command, MemberConverter
 from util.data import Data
 
 
@@ -31,8 +31,15 @@ class ProvCog(Cog):
         return
 
     @command(name="userinfo")
-    async def get_user_info(self, ctx, target: Member = None):
-        target = ctx.author if target is None else target
+    async def get_user_info(self, ctx, target: str = None):
+        if target is None:
+            target = ctx.author
+        else:
+            guild = ctx.guild
+            member = guild.get_member_named(target)
+            if member is None:
+                await self.bot.send_bug_report("MemberNotFound", name=target, guild=guild, author=ctx.author)
+                return
         # a hint as of why this may break
         assert type(target) == Member
         fields = [("ID", target.id, False),

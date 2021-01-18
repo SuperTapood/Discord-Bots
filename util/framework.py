@@ -3,7 +3,7 @@ from datetime import datetime
 
 import discord
 
-from util.exceptions import BotNotNamed, NoTokenFound, ActivityNotFound
+from util.exceptions import BotNotNamed, NoTokenFound, ActivityNotFound, ExceptionNotFound
 from util.data import Data
 from discord import Intents, Embed
 
@@ -42,7 +42,7 @@ class Framework(Bot):
         # loads the token used by this specific bot
         try:
             assert self.name != ""
-            with open(f"{self.name}/{self.name}.token", "r", encoding="utf-8") as file:
+            with open(f"{self.name}.token", "r", encoding="utf-8") as file:
                 self.token = file.read()
         except AssertionError:
             # if this is being raised, no name was given
@@ -98,13 +98,29 @@ class Framework(Bot):
         return cmd, "".join(ctx)
 
     @staticmethod
-    def generate_embed(title, colour, fields, timestamp=datetime.utcnow(), thumbnail_url=None) -> Embed:
-        embed = Embed(title=title, colour=colour, timestamp=timestamp)
+    def generate_embed(title, fields, colour=None, timestamp=datetime.utcnow(), thumbnail_url=None) -> Embed:
+        if colour is not None:
+            embed = Embed(title=title, colour=colour, timestamp=timestamp)
+        else:
+            embed = Embed(title=title, timestamp=timestamp)
         for name, value, inline in fields:
             embed.add_field(name=name, value=value, inline=inline)
         if thumbnail_url is not None:
             embed.set_thumbnail(url=thumbnail_url)
         return embed
+
+    async def send_bug_report(self, exc, **kwargs):
+        # sourcery skip: remove-unnecessary-else, swap-if-else-branches
+        out = self.get_channel(Data.get_channel("bot bugs"))
+        if exc == "MemberNotFound":
+            msg = f"{exc}Error: could not find member '{kwargs['name']}' " \
+                  f"in guild '{kwargs['guild']}'. Command was invoked by user {kwargs['author'].mention}"
+            cause = "I don't believe this is an actual bug, rather a user mistake. Please verify" \
+                    f"the existence or non-existence of the user '{kwargs['name']}'"
+        else:
+            raise ExceptionNotFound(exc)
+        await out.send(msg)
+        await out.send(cause)
 
     # end of helper functions ----------------------------------------------------
 

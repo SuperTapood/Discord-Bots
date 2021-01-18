@@ -58,3 +58,18 @@ class ActivityNotFound(Exception):
         return f"Activity {self.activity} does not exist"
 
     pass
+
+
+class ExceptionNotFound(object):
+    # raised when an unknown exception is reported
+
+    __module__ = Exception.__module__
+
+    def __init__(self, exc):
+        self.exc = exc
+        return
+
+    def __str__(self):
+        return f"Exception {self.exc} does not exist and cannot be reported"
+
+    pass

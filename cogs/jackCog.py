@@ -4,6 +4,7 @@ from discord.ext.commands import Cog
 class JackCog(Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.bot.remove_command("help")
         return
 
     @Cog.listener()

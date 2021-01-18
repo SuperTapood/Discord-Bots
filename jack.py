@@ -17,7 +17,10 @@ class Jack(Framework):
 
     @override(Framework)
     def setup(self):
-        self.load_extension("jack.jackCog")
+        self.load_extension("cogs.jackCog")
         print("JackCog loaded")
         return
     pass
+
+
+Jack().run()
