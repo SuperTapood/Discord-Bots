@@ -4,9 +4,10 @@
 
 ### Table of Contents:
 
-- [Version 0.0.1](#15012021---001)
+- [Version 0.0.3](#21012021---003)
 - [Version 0.0.2](#18012021---002)
-- [Version 0.0.3](#20012021---003)
+- [Version 0.0.1](#15012021---001)
+
 
 
 #### 21/01/2021 - 0.0.3
@@ -47,7 +48,7 @@
 - [X] &nbsp;&nbsp;
   added a get role to the data class
 - [X] &nbsp;&nbsp;
-  bots will now report bugs to a specific channel g
+  bots will now report bugs to a specific channel
 - [X] &nbsp;&nbsp;
   bots will now express their opinions 
   about the cause of the bug in the bug report
