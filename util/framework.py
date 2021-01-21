@@ -71,21 +71,31 @@ class Framework(Bot):
         # game and streaming are two special ones
         # the other ones will be harder to implement
         if activity_type == "game":
-            activity = discord.Game(name=name, type=3)
+            activity = discord.Game(name=name)
             await self.change_presence(status=discord.Status.online, activity=activity)
         elif activity_type == "stream":
             activity = discord.Streaming(name=name, url=kwargs["url"])
             await self.change_presence(status=discord.Status.online, activity=activity)
-        # todo: implement the other activities, find out what the types are
+        elif activity_type == "listen":
+            activity = discord.Activity(type=discord.ActivityType.listening, name=name)
+            await self.change_presence(status=discord.Status.online, activity=activity)
+        elif activity_type == "watch":
+            activity = discord.Activity(type=discord.ActivityType.watching, name=name)
+            await self.change_presence(status=discord.Status.online, activity=activity)
+        elif activity_type == "custom":
+            # this doesn't appear to work...
+            activity = discord.Activity(type=discord.ActivityType.custom, name=name)
+            await self.change_presence(status=discord.Status.online, activity=activity)
         else:
             raise ActivityNotFound(activity_type)
         return
 
     async def send(self, channel, msg):
         # a quick nice helper function to send messages
-        # todo: add a more complex channel system that will support
-        #  several types of channels: (int, string, TextChannel)
-        channel = self.get_channel(Data.get_channel(channel))
+        if type(channel) == str:
+            channel = self.get_channel(Data.get_channel(channel))
+        elif type(channel) == int:
+            channel = self.get_channel(channel)
         await channel.send(msg)
         return
 

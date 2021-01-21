@@ -6,6 +6,30 @@
 
 - [Version 0.0.1](#15012021---001)
 - [Version 0.0.2](#18012021---002)
+- [Version 0.0.3](#20012021---003)
+
+
+#### 21/01/2021 - 0.0.3
+- [X] &nbsp;&nbsp;
+  added a new bot - Mr. House - that will have some nice gambling games
+- [X] &nbsp;&nbsp;
+  created a new cog for Mr. House
+- [X] &nbsp;&nbsp;
+  Mr. House now can play 21 with you
+- [X] &nbsp;&nbsp;
+  added Mr. House to the help command
+- [X] &nbsp;&nbsp;
+  added the rest of the discord activities
+- [X] &nbsp;&nbsp;
+  added an empty bot for easier start
+- [X] &nbsp;&nbsp;
+  added an empty cog for easier start
+- [X] &nbsp;&nbsp;
+  send command in Framework can now take more than 1 type of channel (all other calls
+  have been adjusted)
+- [ ] &nbsp;&nbsp;
+  EMPTY  
+
 
 #### 18/01/2021 - 0.0.2
 - [X] &nbsp;&nbsp;

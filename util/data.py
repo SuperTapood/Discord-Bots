@@ -46,12 +46,15 @@ class Data:
         out = {"Providence": prov.generate_embed(
             title="Help With the Providence bot",
             fields=[
-                ("!Help", cls.get_documentation("help"), True),
+                ("!help", cls.get_documentation("help"), True),
                 ("!userinfo", cls.get_documentation("userinfo"), True),
             ],
         ), "Jack": prov.generate_embed(
             title="Help With the Jack bot",
             fields=[("on_member_join", cls.get_documentation("on_member_join"), True)]
+        ), "Mr. House": prov.generate_embed(
+            title="Help With the Mr. House bot",
+            fields=[("!bj", cls.get_documentation("bj"), True)]
         )}
         return out
 
@@ -75,7 +78,10 @@ class Data:
         "userinfo": "Provides info about the provided user,\n"
                     "or the sender when none are provided",
         "on_member_join": "The bot will greet any new members\n"
-                          "of the server without being invoked"
+                          "of the server without being invoked",
+        "bj": "The bot will start to play 21 with you.\n"
+                             "while playing, use commands hit and skip to \n"
+                             "get more cards or skip the turn accordingly"
     }
 
     @classmethod
