@@ -1,7 +1,7 @@
 # all of the custom exceptions that are being used in this project
 
 class OverrideError(Exception):
-    # raised when a method cannot be overriden
+    # raised when a method cannot be overridden
     # useful for users who didn't spend a million billion
     # hours developing this API
     # kinda useful

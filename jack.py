@@ -1,5 +1,5 @@
-from util.framework import Framework
 from util.data import Data
+from util.framework import Framework
 from util.override import override
 
 
@@ -8,7 +8,7 @@ class Jack(Framework):
         super().__init__("Jack")
         self.set_callback("on_ready", self.ready)
         return
-    
+
     async def ready(self):
         print("JACK!!")
         await self.set_presence("game", "catch with Ethan")
@@ -21,6 +21,7 @@ class Jack(Framework):
         self.load_extension("cogs.jackCog")
         print("JackCog loaded")
         return
+
     pass
 
 

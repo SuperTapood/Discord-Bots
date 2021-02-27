@@ -137,19 +137,19 @@ class HouseCog(Cog):
         await ctx.send(f"Bot sum is {sum_bot}")
         await ctx.send(f"Player sum is {sum_player}")
         if (
-            sum_player > 21
-            and sum_bot <= 21
-            or (sum_bot <= 21 or sum_player > 21)
-            and abs_player > abs_bot
+                sum_player > 21 >= sum_bot
+                or (sum_bot <= 21 or sum_player > 21)
+                and abs_player > abs_bot
         ):
             await ctx.send("Bot won!")
-        elif sum_bot > 21 and sum_player <= 21 or abs_bot > abs_player:
+        elif sum_bot > 21 >= sum_player or abs_bot > abs_player:
             await ctx.send("Player won!")
         elif abs_player == abs_bot:
             await ctx.send("Draw!")
         await ctx.send("Best of 3?")
         self.is_playing = False
         return
+
     pass
 
 

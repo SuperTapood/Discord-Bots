@@ -3,6 +3,7 @@ from typing import Optional
 
 from discord import Member
 from discord.ext.commands import Cog, command
+
 from util.data import Data
 
 
@@ -54,13 +55,6 @@ class ProvCog(Cog):
                                         thumbnail_url=target.avatar_url)
 
         await ctx.send(embed=embed)
-        return
-
-    @command(name="terminate", aliases=["kill"])
-    async def stop(self, ctx, cmd):
-        if ctx.author.id != Data.get_owners()[0]:
-            ctx.send("Terminating...")
-            quit()
         return
 
     pass

@@ -2,12 +2,11 @@
 from datetime import datetime
 
 import discord
-
-from util.exceptions import BotNotNamed, NoTokenFound, ActivityNotFound, ExceptionNotFound
-from util.data import Data
 from discord import Intents, Embed
-
 from discord.ext.commands import Bot, CommandNotFound
+
+from util.data import Data
+from util.exceptions import BotNotNamed, NoTokenFound, ActivityNotFound, ExceptionNotFound
 
 
 class Framework(Bot):
@@ -62,7 +61,7 @@ class Framework(Bot):
         self.load_token()
         # boot this bot up !
         super().run(self.token, reconnect=True)
-        return
+        return self
 
     # start of helper functions --------------------------------------------------
 
@@ -119,8 +118,8 @@ class Framework(Bot):
             embed.set_thumbnail(url=thumbnail_url)
         return embed
 
-    async def send_bug_report(self, exc, **kwargs):
-        # sourcery skip: remove-unnecessary-else, swap-if-else-branches
+    async def send_bug_report(self, exc, **kwargs):  # sourcery skip
+        # sourcery will be skipped bc this function will grow with more exceptions
         out = self.get_channel(Data.get_channel("bot bugs"))
         if exc == "MemberNotFound":
             msg = f"{exc}Error: could not find member '{kwargs['name']}' " \

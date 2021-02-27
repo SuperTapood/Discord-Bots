@@ -1,8 +1,6 @@
-from discord import Embed
-
+from util.data import Data
 from util.framework import Framework
 from util.override import override
-from util.data import Data
 
 
 class Providence(Framework):
@@ -23,7 +21,8 @@ class Providence(Framework):
         await self.send("online log", "disconnected")
         return
 
-    async def message(self, msg):
+    @staticmethod
+    async def message(msg):
         # the on_message callback
         if not msg.author.bot:
             content = msg.clean_content
@@ -47,6 +46,7 @@ class Providence(Framework):
         # this starts to get annoying while testing
         await self.send("online log", chosen.replace("%", "Providence"))
         return
+
     pass
 
 

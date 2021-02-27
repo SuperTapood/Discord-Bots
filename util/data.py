@@ -80,8 +80,8 @@ class Data:
         "on_member_join": "The bot will greet any new members\n"
                           "of the server without being invoked",
         "bj": "The bot will start to play 21 with you.\n"
-                             "while playing, use commands hit and skip to \n"
-                             "get more cards or skip the turn accordingly"
+              "while playing, use commands hit and skip to \n"
+              "get more cards or skip the turn accordingly"
     }
 
     @classmethod
@@ -101,4 +101,5 @@ class Data:
             return cls.__ROLES[role]
         else:
             raise NameError(f"role {role} not found in roles dictionary")
+
     pass
