@@ -18,7 +18,6 @@ class Framework(Bot):
         # reset all callbacks. might add defaults or smthg
         # or use dict.get(name, default=self.default_callback)
         self.callbacks = {}
-        self.cmd_callbacks = {}
         # initialize Discord.Bot
         super().__init__(command_prefix="!",
                          owner_ids=Data.get_owners(),
@@ -29,12 +28,6 @@ class Framework(Bot):
         # this function is where the REAL magic happens
         if name not in self.callbacks:
             self.callbacks[name] = callback
-        return
-
-    def set_command_callback(self, cmd, callback):
-        # this method is temporary maybe. I want to use both commands and plain message reading
-        if cmd not in self.cmd_callbacks:
-            self.cmd_callbacks[cmd] = callback
         return
 
     def load_token(self):

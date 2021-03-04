@@ -60,7 +60,7 @@ class ActivityNotFound(Exception):
     pass
 
 
-class ExceptionNotFound(object):
+class ExceptionNotFound(Exception):
     # raised when an unknown exception is reported
 
     __module__ = Exception.__module__

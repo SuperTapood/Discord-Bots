@@ -15,6 +15,3 @@ class House(Framework):
         return
 
     pass
-
-
-House().run()

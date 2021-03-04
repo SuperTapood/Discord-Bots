@@ -6,7 +6,7 @@ class Data:
     __OWNER_IDS = 550555135869190158
 
     @classmethod
-    def get_owners(cls) -> list:
+    def get_owners(cls):
         # get the owner of the bot
         # this is returned as a list bc discord.py needs it to
         return [cls.__OWNER_IDS]

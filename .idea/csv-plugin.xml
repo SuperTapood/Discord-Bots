@@ -24,6 +24,48 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\core\data.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\core\data.pyi">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\core\exceptions.pyi">
+          <value>
+            <Attribute>
+              <option name="separator" value=":" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\core\framework.pyi">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\core\masterCog.pyi">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\core\override.pyi">
+          <value>
+            <Attribute>
+              <option name="separator" value=":" />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\empty\empty.py">
           <value>
             <Attribute>
@@ -52,6 +94,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\house\houseCog.pyi">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\jack.py">
           <value>
             <Attribute>
@@ -60,6 +109,13 @@
           </value>
         </entry>
         <entry key="\jack\jack.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\jack\jackCog.pyi">
           <value>
             <Attribute>
               <option name="separator" value="," />
@@ -77,6 +133,13 @@
           <value>
             <Attribute>
               <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\providence\providence.pyi">
+          <value>
+            <Attribute>
+              <option name="separator" value=":" />
             </Attribute>
           </value>
         </entry>
