@@ -3,10 +3,10 @@ from datetime import datetime
 
 import discord
 from discord import Intents, Embed
-from discord.ext.commands import Bot, CommandNotFound
+from discord.ext.commands import Bot, CommandNotFound, ExtensionNotFound
 
-from util.data import Data
-from util.exceptions import BotNotNamed, NoTokenFound, ActivityNotFound, ExceptionNotFound
+from core import Data, BotNotNamed, NoTokenFound, ActivityNotFound, ExceptionNotFound
+from tokens import get_token
 
 
 class Framework(Bot):
@@ -41,19 +41,21 @@ class Framework(Bot):
         # loads the token used by this specific bot
         try:
             assert self.name != ""
-            with open(f"{self.name}.token", "r", encoding="utf-8") as file:
-                self.token = file.read()
+            self.token = get_token(self.name)
         except AssertionError:
             # if this is being raised, no name was given
             raise BotNotNamed()
         except FileNotFoundError:
             # if this is being raised, no token file was found
             raise NoTokenFound(self.name)
-        return
 
     def setup(self):
-        # blah blah yada yada
-        pass
+        try:
+            self.load_extension(f"{self.name}.{self.name}Cog")
+            print(f"{self.name.capitalize()} Cog loaded!")
+        except ExtensionNotFound as e:
+            print(f"{self.name.capitalize()} has no cog")
+        return
 
     def run(self):
         # this is the main function
@@ -82,7 +84,9 @@ class Framework(Bot):
             activity = discord.Activity(type=discord.ActivityType.watching, name=name)
             await self.change_presence(status=discord.Status.online, activity=activity)
         elif activity_type == "custom":
+            raise NotImplemented()
             # this doesn't appear to work...
+            # noinspection PyUnreachableCode
             activity = discord.Activity(type=discord.ActivityType.custom, name=name)
             await self.change_presence(status=discord.Status.online, activity=activity)
         else:

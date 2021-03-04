@@ -1,9 +1,11 @@
 from random import randint
 
-from discord.ext.commands import Cog, command
+from discord.ext.commands import command
+
+from core import MasterCog
 
 
-class HouseCog(Cog):
+class HouseCog(MasterCog):
     suits = {
         0: "♣",
         1: "❤",
@@ -18,11 +20,6 @@ class HouseCog(Cog):
     player_skip = False
     bot_skip = False
     is_playing = False
-
-    def __init__(self, bot):
-        self.bot = bot
-        self.bot.remove_command("help")
-        return
 
     def generate_deck(self):
         self.deck = [list(range(1, 11)) for _ in range(4)]
