@@ -11,26 +11,41 @@ from tokens import get_token
 
 class Framework(Bot):
     def __init__(self, name=""):
-        # a bit of variables so pycharm won't hate me
+        """
+        init the bot\n
+        :param name: str, the name of the bot. Will be used to enforce cog naming
+            and token regulations
+        """
+        # declaring variables early
         self.token = ""
         self.guild = None
         self.name = name
-        # reset all callbacks. might add defaults or smthg
-        # or use dict.get(name, default=self.default_callback)
+        # reset all callbacks
         self.callbacks = {}
-        # initialize Discord.Bot
+        # initialize the master class
         super().__init__(command_prefix="!",
                          owner_ids=Data.get_owners(),
                          intents=Intents.all())
         return
 
     def set_callback(self, name, callback):
+        """
+        set a callback for a function\n
+        :param name: str, the function's name
+        :param callback: any function, the function that will be called
+        """
         # this function is where the REAL magic happens
+        # jk, just allowing you to do whatever
+        # please for the love of god don't override
+        # the functions that use the callbacks
         if name not in self.callbacks:
             self.callbacks[name] = callback
         return
 
     def load_token(self):
+        """
+        load the bot's token
+        """
         # loads the token used by this specific bot
         try:
             assert self.name != ""
@@ -43,14 +58,21 @@ class Framework(Bot):
             raise NoTokenFound(self.name)
 
     def setup(self):
+        """
+        load the bot's cog
+        """
         try:
             self.load_extension(f"{self.name}.{self.name}Cog")
             print(f"{self.name.capitalize()} Cog loaded!")
-        except ExtensionNotFound as e:
+        except ExtensionNotFound:
             print(f"{self.name.capitalize()} has no cog")
         return
 
     def run(self):
+        """
+        load the cog, the token and then boot the bot\n
+        :return: self, for no reason at all
+        """
         # this is the main function
         self.setup()
         self.load_token()
@@ -61,9 +83,13 @@ class Framework(Bot):
     # start of helper functions --------------------------------------------------
 
     async def set_presence(self, activity_type, name, **kwargs):
-        # sets an activity for the bot
-        # game and streaming are two special ones
-        # the other ones will be harder to implement
+        """
+        set the bot's presence\n
+        :param activity_type: str, name of the activity
+        :param name: str, name of the activity itself
+        :param kwargs: dict[str, Any], any other arguments
+            that may be used
+        """
         if activity_type == "game":
             activity = discord.Game(name=name)
             await self.change_presence(status=discord.Status.online, activity=activity)
@@ -87,6 +113,12 @@ class Framework(Bot):
         return
 
     async def send(self, channel, msg):
+        """
+        send a message to a channel\n
+        :param channel: str/int/TextChannel, the channel.
+            None TextChannel types will be casted to TextChannel.
+        :param msg: str, the message to send
+        """
         # a quick nice helper function to send messages
         if type(channel) == str:
             channel = self.get_channel(Data.get_channel(channel))
@@ -97,14 +129,29 @@ class Framework(Bot):
 
     @staticmethod
     def extract_cmd(msg):
-        # extract the command and the rest of it from a message
+        """
+        extract a command from a message\n
+        :param msg: str, the message
+        :return: tuple[str], the command and the context
+        """
         msg = msg[1:].split(" ")
         cmd = msg[0]
         ctx = msg[1:]
         return cmd, "".join(ctx)
 
     @staticmethod
-    def generate_embed(title, fields, colour=None, timestamp=datetime.utcnow(), thumbnail_url=None) -> Embed:
+    def generate_embed(title, fields, colour=None, timestamp=datetime.utcnow(), thumbnail_url=None):
+        """
+        generate an embed using some defaults\n
+        :param title: str, the title of the embed
+        :param fields: list[tuple[str, str, bool]], all
+            the fields to add to the embed ordered like this:
+            (title, text, inline?)
+        :param colour: optional color, the color of the embed
+        :param timestamp: optional str, the timestamp
+        :param thumbnail_url: optional str, the image to put in the thumbnail
+        :return: Embed, the generated embed
+        """
         if colour is not None:
             embed = Embed(title=title, colour=colour, timestamp=timestamp)
         else:
@@ -116,11 +163,16 @@ class Framework(Bot):
         return embed
 
     async def send_bug_report(self, exc, **kwargs):  # sourcery skip
+        """
+        send a bug report to a channel\n
+        :param exc: str, the reported exception
+        :param kwargs: any arguments
+        """
         # sourcery will be skipped bc this function will grow with more exceptions
         out = self.get_channel(Data.get_channel("bot bugs"))
         if exc == "MemberNotFound":
             msg = f"{exc}Error: could not find member '{kwargs['name']}' " \
-                  f"in guild '{kwargs['guild']}'. Command was invoked by user {kwargs['author'].mention}"
+                  f"in guild '{kwargs['guild']}'. Command was invoked by user {kwargs['author']}"
             cause = "I don't believe this is an actual bug, rather a user mistake. Please verify" \
                     f"the existence or non-existence of the user '{kwargs['name']}'"
         else:
@@ -135,23 +187,38 @@ class Framework(Bot):
     # callback functions when they are invoked
 
     async def on_connect(self):
+        """
+        attempt to call the on_connect callback
+        """
         if "on_connect" in self.callbacks:
             await self.callbacks["on_connect"]()
         return
 
     async def on_disconnect(self):
+        """
+        attempt to call the on_disconnect callback
+        """
         if "on_disconnect" in self.callbacks:
             await self.callbacks["on_disconnect"]()
         return
 
     async def on_ready(self):
+        """
+        attempt to call the on_ready callback
+        """
         if "on_ready" in self.callbacks:
             await self.callbacks["on_ready"]()
         return
 
     async def on_message(self, message):
+        """
+        handles any sent messages. if the sent message is a command,
+        discord will handle it on its own. else, the on_message callback will be
+        invoked
+        :param message: str, the message that was sent
+        """
         # i don't want an infinite loop of the bot checking itself
-        # or even check them
+        # or even check other bots
         if not message.author.bot:
             # if the message is a command
             if message.clean_content[0] == "!":

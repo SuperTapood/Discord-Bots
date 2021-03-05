@@ -23,6 +23,7 @@ class BotNotNamed(Exception):
 
 class NoTokenFound(Exception):
     __module__: str
+    name: str
 
     def __init__(self, name: str) -> None:
         ...
@@ -48,6 +49,7 @@ class ActivityNotFound(Exception):
 
 class ExceptionNotFound(Exception):
     __module__: str
+    exc: str
 
     def __init__(self, exc: str):
         ...

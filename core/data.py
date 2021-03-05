@@ -7,8 +7,10 @@ class Data:
 
     @classmethod
     def get_owners(cls):
-        # get the owner of the bot
-        # this is returned as a list bc discord.py needs it to
+        """
+        get the owners of the discord server\n
+        :return: list[int], a list of the owners' id
+        """
         return [cls.__OWNER_IDS]
 
     __channels = {"stdout": 784749132073533450,
@@ -18,10 +20,13 @@ class Data:
                   "online log": 798124127433130004}
 
     @classmethod
-    def get_channel(cls, name) -> int:
-        # get the id of channel 'name'
+    def get_channel(cls, name):
+        """
+        return the id of a channel\n
+        :param name: str, the name of the channel
+        :return: int, the channel's id
+        """
         if name not in cls.__channels:
-            # this is being raised so that i'll notice that an illegal channel was entered
             raise NameError(f"name {name} not found in channels dictionary")
         return cls.__channels[name]
 
@@ -29,34 +34,42 @@ class Data:
 
     @classmethod
     def get_guilds(cls) -> int:
-        # a getter for the guild
+        """
+        a getter for the guild id\n
+        :return: int, the guild id
+        """
         return cls.__GUILD
 
-    __BOTS = ["Providence", "Jack"]
+    __BOTS = ["Providence", "Jack", "House", "Rich Uncle Pennybags"]
 
     @classmethod
-    def get_bots(cls) -> list:
-        # a getter for all the bots this project will manage
+    def get_bots(cls):
+        """
+        return a list of all the bots in the server\n
+        :return: list[str], the bots
+        """
         return cls.__BOTS
 
     @classmethod
-    def get_help_embeds(cls, prov) -> dict:
-        # gets all of the embeds for the help command from all of the bots
-        # every two commands will be inlined
-        out = {"Providence": prov.generate_embed(
+    def get_help_embeds(cls, frame):
+        """
+        get the embeds for the help command \n
+        :param frame: Framework, any bot that has inherits from Framework
+        :return: dict[string, Embed] the list of help for each bot
+        """
+        return {"Providence": frame.generate_embed(
             title="Help With the Providence bot",
             fields=[
                 ("!help", cls.get_documentation("help"), True),
                 ("!userinfo", cls.get_documentation("userinfo"), True),
             ],
-        ), "Jack": prov.generate_embed(
+        ), "Jack": frame.generate_embed(
             title="Help With the Jack bot",
             fields=[("on_member_join", cls.get_documentation("on_member_join"), True)]
-        ), "Mr. House": prov.generate_embed(
+        ), "Mr. House": frame.generate_embed(
             title="Help With the Mr. House bot",
             fields=[("!bj", cls.get_documentation("bj"), True)]
         )}
-        return out
 
     __one_liners = [
         "A wild % appeared!",
@@ -69,7 +82,11 @@ class Data:
     ]
 
     @classmethod
-    def get_one_liner(cls) -> str:
+    def get_one_liner(cls):
+        """
+        get a one liner for a bot\n
+        :return: string, the one liner
+        """
         return cls.__one_liners.pop(randint(0, len(cls.__one_liners) - 1))
 
     __DOC = {
@@ -86,6 +103,11 @@ class Data:
 
     @classmethod
     def get_documentation(cls, cmd):
+        """
+        get the documentation for a specific command\n
+        :param cmd: string, the name of the command
+        :return: string, the documentation of the command
+        """
         return cls.__DOC[cmd]
 
     __ROLES = {
@@ -97,6 +119,11 @@ class Data:
 
     @classmethod
     def get_role(cls, role):
+        """
+        get a specific role id\n
+        :param role: str, the role name
+        :return: int, the role's id
+        """
         if role in cls.__ROLES:
             return cls.__ROLES[role]
         else:

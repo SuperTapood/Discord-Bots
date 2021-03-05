@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional, Callable, Union
+from typing import Optional, Callable, Union, Any
 
 from discord import Embed, TextChannel, Color, Message
 from discord.ext.commands import Bot
@@ -28,23 +28,23 @@ class Framework(Bot):
 
     # start of helper functions --------------------------------------------------
 
-    async def set_presence(self, activity_type: str, name: str, **kwargs: Optional[dict[str, str]]):
+    async def set_presence(self, activity_type: str, name: str, **kwargs: Optional[dict[str, Any]]):
         ...
 
     async def send(self, channel: Union[str, int, TextChannel], msg: str):
         ...
 
     @staticmethod
-    def extract_cmd(msg: str) -> str:
+    def extract_cmd(msg: str) -> tuple[str]:
         ...
 
     @staticmethod
-    def generate_embed(title: str, fields: tuple[str, str, bool], colour: Color = None,
+    def generate_embed(title: str, fields: list[tuple[str, str, bool]], colour: Color = None,
                        timestamp: str = datetime.utcnow(),
                        thumbnail_url: str = None) -> Embed:
         ...
 
-    async def send_bug_report(self, exc: str, **kwargs: dict[str, str]) -> None:
+    async def send_bug_report(self, exc: str, **kwargs: dict[str, Any]) -> None:
         ...
 
     # end of helper functions ----------------------------------------------------

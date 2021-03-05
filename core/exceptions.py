@@ -3,8 +3,9 @@
 class OverrideError(Exception):
     # raised when a method cannot be overridden
     # useful for users who didn't spend a million billion
-    # hours developing this API
+    # hours developing this project
     # kinda useful
+    # kinda redundant
 
     __module__ = Exception.__module__
 

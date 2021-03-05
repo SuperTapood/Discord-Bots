@@ -7,7 +7,7 @@ class Data:
     __OWNER_IDS: list[int]
 
     @classmethod
-    def get_owners(cls: Data) -> list:
+    def get_owners(cls: Data) -> list[int]:
         ...
 
     __channels: dict[str, int]
