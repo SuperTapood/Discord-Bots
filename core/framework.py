@@ -32,6 +32,16 @@ class Framework(Bot):
                          intents=intents)
         return
 
+    def get_callbacks(self):
+        callbacks = ["on_connect",
+                     "on_disconnect",
+                     "on_ready",
+                     "on_message"]
+        return {
+            c: self.callbacks.get(c, self.default_callback).__name__
+            for c in callbacks
+        }
+
     async def default_callback(self, *args, **kwargs):
         """
         default callback for functions
@@ -203,21 +213,21 @@ class Framework(Bot):
         """
         attempt to call the on_connect callback
         """
-        await self.callbacks.get("on_connect", default=self.default_callback)()
+        await self.callbacks.get("on_connect", self.default_callback)()
         return
 
     async def on_disconnect(self):
         """
         attempt to call the on_disconnect callback
         """
-        await self.callbacks.get("on_disconnect", default=self.default_callback)()
+        await self.callbacks.get("on_disconnect", self.default_callback)()
         return
 
     async def on_ready(self):
         """
         attempt to call the on_ready callback
         """
-        await self.callbacks.get("on_ready", default=self.default_callback)()
+        await self.callbacks.get("on_ready", self.default_callback)()
         return
 
     async def on_message(self, message):
@@ -239,7 +249,7 @@ class Framework(Bot):
                     pass
             elif "on_message" in self.callbacks:
                 # invoke the callback if the message is not a command
-                await self.callbacks.get("on_message", default=self.default_callback)()
+                await self.callbacks.get("on_message", self.default_callback)()
         return
 
     # end of callback functions -------------------------------------------------

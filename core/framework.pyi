@@ -15,6 +15,9 @@ class Framework(Bot):
                  cmd_prefix: Optional[str] = "!") -> None:
         ...
 
+    def get_callbacks(self) -> dict[str, str]:
+        ...
+
     def default_callback(self, *args: tuple[Any], **kwargs: dict[str, Any]):
         ...
 
