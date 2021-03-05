@@ -14,6 +14,9 @@ class Framework(Bot):
     def __init__(self, name: Optional[str] = "") -> None:
         ...
 
+    def default_callback(self, *args: tuple[Any], **kwargs: dict[str, Any]):
+        ...
+
     def set_callback(self, name: str, callback: Callable) -> None:
         ...
 
