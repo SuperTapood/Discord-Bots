@@ -4,7 +4,8 @@ from core.exceptions import (
     BotNotNamed,
     NoTokenFound,
     ActivityNotFound,
-    ExceptionNotFound
+    ExceptionNotFound,
+    BadCallback
 )
 from core.framework import Framework
 from core.masterCog import MasterCog

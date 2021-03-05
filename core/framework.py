@@ -5,7 +5,7 @@ import discord
 from discord import Intents, Embed
 from discord.ext.commands import Bot, CommandNotFound, ExtensionNotFound
 
-from core import Data, BotNotNamed, NoTokenFound, ActivityNotFound, ExceptionNotFound
+from core import *
 from tokens import get_token
 
 
@@ -32,7 +32,24 @@ class Framework(Bot):
                          intents=intents)
         return
 
+    async def invoke_callback(self, callback, *args, **kwargs):
+        """
+        invoke a callback
+        :param callback: str, the name of the function
+        :param args: Any, the arguments to pass into the callback
+        :param kwargs: Any, the keyword arguments to pass into the callback
+        """
+        callf = self.callbacks.get(callback, self.default_callback)
+        try:
+            await callf(args, kwargs)
+        except TypeError as e:
+            raise BadCallback(callf, callback, e)
+        return
+
     def get_callbacks(self):
+        """
+        get all of the current callbacks
+        """
         callbacks = ["on_connect",
                      "on_disconnect",
                      "on_ready",
@@ -213,21 +230,21 @@ class Framework(Bot):
         """
         attempt to call the on_connect callback
         """
-        await self.callbacks.get("on_connect", self.default_callback)()
+        await self.invoke_callback("on_connect")
         return
 
     async def on_disconnect(self):
         """
         attempt to call the on_disconnect callback
         """
-        await self.callbacks.get("on_disconnect", self.default_callback)()
+        await self.invoke_callback("on_disconnect")
         return
 
     async def on_ready(self):
         """
         attempt to call the on_ready callback
         """
-        await self.callbacks.get("on_ready", self.default_callback)()
+        await self.invoke_callback("on_ready")
         return
 
     async def on_message(self, message):
@@ -249,7 +266,7 @@ class Framework(Bot):
                     pass
             elif "on_message" in self.callbacks:
                 # invoke the callback if the message is not a command
-                await self.callbacks.get("on_message", self.default_callback)()
+                await self.invoke_callback("on_message", message)
         return
 
     # end of callback functions -------------------------------------------------

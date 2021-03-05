@@ -1,3 +1,6 @@
+from typing import Any
+
+
 class OverrideError(Exception):
     __module__: str
     method: str
@@ -52,6 +55,23 @@ class ExceptionNotFound(Exception):
     exc: str
 
     def __init__(self, exc: str):
+        ...
+
+    def __str__(self) -> str:
+        ...
+
+    pass
+
+
+class BadCallback(Exception):
+    # raised when a bad callback is being invoked
+
+    __module__: str
+    callback: str
+    src: str
+    reason: Any
+
+    def __init__(self, callback: str, src: str, reason: Any):
         ...
 
     def __str__(self) -> str:

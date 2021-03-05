@@ -74,3 +74,22 @@ class ExceptionNotFound(Exception):
         return f"Exception {self.exc} does not exist and cannot be reported"
 
     pass
+
+
+class BadCallback(Exception):
+    # raised when a bad callback is being invoked
+
+    __module__ = Exception.__module__
+
+    def __init__(self, callback, src, reason):
+        self.callback = callback
+        self.src = src
+        self.reason = reason
+        return
+
+    def __str__(self):
+        return f"callback {self.callback} is not " \
+               f"applicable to be a callback of {self.src}" \
+               f"because {self.reason}"
+
+    pass
