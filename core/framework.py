@@ -132,24 +132,19 @@ class Framework(Bot):
         """
         if activity_type == "game":
             activity = discord.Game(name=name)
-            await self.change_presence(status=discord.Status.online, activity=activity)
         elif activity_type == "stream":
             activity = discord.Streaming(name=name, url=kwargs["url"])
-            await self.change_presence(status=discord.Status.online, activity=activity)
         elif activity_type == "listen":
             activity = discord.Activity(type=discord.ActivityType.listening, name=name)
-            await self.change_presence(status=discord.Status.online, activity=activity)
         elif activity_type == "watch":
             activity = discord.Activity(type=discord.ActivityType.watching, name=name)
-            await self.change_presence(status=discord.Status.online, activity=activity)
         elif activity_type == "custom":
-            raise NotImplemented()
-            # this doesn't appear to work...
-            # noinspection PyUnreachableCode
             activity = discord.Activity(type=discord.ActivityType.custom, name=name)
-            await self.change_presence(status=discord.Status.online, activity=activity)
+        elif activity_type == "competing":
+            activity = discord.Activity(type=discord.ActivityType.competing, name=name)
         else:
             raise ActivityNotFound(activity_type)
+        await self.change_presence(status=discord.Status.online, activity=activity)
         return
 
     async def send(self, channel, msg):
