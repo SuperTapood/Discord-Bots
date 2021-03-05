@@ -10,12 +10,16 @@ from tokens import get_token
 
 
 class Framework(Bot):
-    def __init__(self, name=""):
+    def __init__(self, name="", intents=Intents.all()):
         """
         init the bot\n
         :param name: str, the name of the bot. Will be used to enforce cog naming
             and token regulations
+        :param intents: optional str / Intents, the intents of the bot
         """
+        # figure out intents
+        if type(intents) != Intents:
+            intents = getattr(Intents, intents)()
         # declaring variables early
         self.token = ""
         self.guild = None
@@ -25,7 +29,7 @@ class Framework(Bot):
         # initialize the master class
         super().__init__(command_prefix="!",
                          owner_ids=Data.get_owners(),
-                         intents=Intents.all())
+                         intents=intents)
         return
 
     async def default_callback(self, *args, **kwargs):

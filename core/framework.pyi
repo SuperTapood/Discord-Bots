@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional, Callable, Union, Any
 
-from discord import Embed, TextChannel, Color, Message
+from discord import Embed, TextChannel, Color, Message, Intents
 from discord.ext.commands import Bot
 
 
@@ -11,7 +11,7 @@ class Framework(Bot):
     name: str
     callbacks: dict[str, Callable]
 
-    def __init__(self, name: Optional[str] = "") -> None:
+    def __init__(self, name: Optional[str] = "", intents: Optional[Union[str, Intents]]=Intents.all()) -> None:
         ...
 
     def default_callback(self, *args: tuple[Any], **kwargs: dict[str, Any]):
