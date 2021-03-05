@@ -10,7 +10,7 @@ from tokens import get_token
 
 
 class Framework(Bot):
-    def __init__(self, name="", intents=Intents.all()):
+    def __init__(self, name="", intents=Intents.all(), cmd_prefix="!"):
         """
         init the bot\n
         :param name: str, the name of the bot. Will be used to enforce cog naming
@@ -27,7 +27,7 @@ class Framework(Bot):
         # reset all callbacks
         self.callbacks = {}
         # initialize the master class
-        super().__init__(command_prefix="!",
+        super().__init__(command_prefix=cmd_prefix,
                          owner_ids=Data.get_owners(),
                          intents=intents)
         return
