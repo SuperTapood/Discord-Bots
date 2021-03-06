@@ -50,11 +50,15 @@ class Framework(Bot):
 
     @staticmethod
     def generate_embed(title: str, fields: list[tuple[str, str, bool]], colour: Color = None,
-                       timestamp: str = datetime.utcnow(),
+                       timestamp: datetime = datetime.utcnow(),
                        thumbnail_url: str = None) -> Embed:
         ...
 
-    async def send_bug_report(self, exc: str, **kwargs: dict[str, Any]) -> None:
+    async def generate_send_embed(self, title, fields, channel, colour=None, timestamp=datetime.utcnow(),
+                                  thumbnail_url=None):
+        ...
+
+    async def send_bug_report(self, exc: str, **kwargs: Any) -> None:
         ...
 
     # end of helper functions ----------------------------------------------------

@@ -15,3 +15,8 @@ class ProvCog(MasterCog):
         ...
 
     pass
+
+
+def setup(bot):
+    bot.add_cog(ProvCog(bot))
+    return

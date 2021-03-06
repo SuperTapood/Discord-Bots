@@ -89,7 +89,7 @@ class BadCallback(Exception):
 
     def __str__(self):
         return f"callback {self.callback} is not " \
-               f"applicable to be a callback of {self.src}" \
+               f"applicable to be a callback of {self.src} " \
                f"because {self.reason}"
 
     pass

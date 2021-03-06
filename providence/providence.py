@@ -30,7 +30,7 @@ class Providence(Framework):
 
     async def ready(self):
         # a callback for when the bot is ready
-        print("READY!")
+        print("ready")
         # sets presence for the bot
         await self.set_presence("game", "with you peasants")
         # announce thyself

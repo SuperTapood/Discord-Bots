@@ -41,7 +41,16 @@ class Framework(Bot):
         """
         callf = self.callbacks.get(callback, self.default_callback)
         try:
-            await callf(args, kwargs)
+            if args == ():
+                if kwargs == {}:
+                    await callf()
+                else:
+                    await callf(kwargs)
+            else:
+                if kwargs == {}:
+                    await callf(args)
+                else:
+                    await callf(args, kwargs)
         except TypeError as e:
             raise BadCallback(callf, callback, e)
         return
@@ -197,6 +206,15 @@ class Framework(Bot):
             embed.set_thumbnail(url=thumbnail_url)
         return embed
 
+    async def generate_send_embed(self, title, fields, channel, colour=None, timestamp=datetime.utcnow(),
+                                  thumbnail_url=None):
+        embed = self.generate_embed(title, fields, colour, timestamp, thumbnail_url)
+        if type(channel) == str:
+            channel = self.get_channel(Data.get_channel(channel))
+        elif type(channel) == int:
+            channel = self.get_channel(channel)
+        await channel.send(embed=embed)
+
     async def send_bug_report(self, exc, **kwargs):  # sourcery skip
         """
         send a bug report to a channel\n
@@ -206,14 +224,14 @@ class Framework(Bot):
         # sourcery will be skipped bc this function will grow with more exceptions
         out = self.get_channel(Data.get_channel("bot bugs"))
         if exc == "MemberNotFound":
-            msg = f"{exc}Error: could not find member '{kwargs['name']}' " \
+            msg = f"MemberNotFound: could not find member '{kwargs['name']}' " \
                   f"in guild '{kwargs['guild']}'. Command was invoked by user {kwargs['author']}"
-            cause = "I don't believe this is an actual bug, rather a user mistake. Please verify" \
-                    f"the existence or non-existence of the user '{kwargs['name']}'"
+        elif exc == "KeyError":
+            msg = f"KeyError: member {kwargs['name']} (id {kwargs['key']}) does not exist in {kwargs['data']}"
         else:
             raise ExceptionNotFound(exc)
         await out.send(msg)
-        await out.send(cause)
+        return
 
     # end of helper functions ----------------------------------------------------
 

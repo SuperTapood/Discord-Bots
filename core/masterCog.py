@@ -35,4 +35,16 @@ class MasterCog(Cog):
     async def get_user_info(self, ctx, target=None):
         pass
 
+    @command(name="init")
+    async def init(self, ctx):
+        pass
+
+    @command(name="reset")
+    async def reset(self, ctx):
+        pass
+
+    @command(name="browse")
+    async def browse(self, ctx):
+        pass
+
     pass
