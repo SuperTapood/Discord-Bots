@@ -5,6 +5,12 @@ class Providence(Framework):
     # one liners that bots will use to report they are ready
     # the % will be replaced with the bots' name
 
+    # helped commands for each bot
+    docs = {"Providence": ["help", "userinfo"],
+            "Jack": ["on_member_join"],
+            "House": ["bj"],
+            "Uncle": ["init", "stats", "browse"]}
+
     def __init__(self):
         # initialize the superclass first
         super().__init__("providence")

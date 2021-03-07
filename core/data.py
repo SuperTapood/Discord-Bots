@@ -61,14 +61,16 @@ class Data:
         # frame has a dict with bots and their commands
         # omg what have i done
         return {
-            bot: [
+            bot: frame.generate_embed(
+                title=f"{bot}",
+                fields=[
                 (
                     cmd,
                     cls.get_documentation(cmd),
-                    i % 2 == 0
+                    True
                 )
                 for i, cmd in enumerate(frame.docs[bot])
-            ] for bot in frame.docs
+            ]) for bot in frame.docs
         }
 
     __one_liners = [
@@ -98,7 +100,12 @@ class Data:
                           "of the server without being invoked",
         "bj": "The bot will start to play 21 with you.\n"
               "while playing, use commands hit and skip to \n"
-              "get more cards or skip the turn accordingly"
+              "get more cards or skip the turn accordingly",
+        "init": "creates a new profile for the player. This is\n"
+                "required for the game to work",
+        "stats": "prints out the stats for the player",
+        "browse": "shows the catalog for the player",
+        "buy": "upgrades a specific mine level"
     }
 
     @classmethod
