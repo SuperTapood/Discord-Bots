@@ -1,5 +1,6 @@
-from discord.ext.commands import Cog, Bot, CommandNotFound
-from discord.ext.commands import command
+from discord.ext.commands import Cog, CommandNotFound, Context
+
+from core import Data
 
 
 async def on_command_error(ctx, error):
@@ -23,5 +24,7 @@ class MasterCog(Cog):
 
         self.bot.remove_command("help")
         return
+
+
 
     pass

@@ -1,7 +1,7 @@
 import json
 from time import time
 
-from discord.ext.commands import command
+from discord.ext.commands import command, Context
 
 from core import MasterCog, Data
 
@@ -33,6 +33,13 @@ class UncleCog(MasterCog):
             with open(self.path, "w") as file:
                 file.write(json.dumps(self.data))
         return
+
+    def is_owner(self, arg):
+        if type(arg) == Context:
+            arg = arg.author.id
+        else:
+            raise NotImplementedError()
+        return arg in Data.get_owners()
 
     @staticmethod
     def get_new_data():
@@ -113,7 +120,7 @@ class UncleCog(MasterCog):
 
     @command(name="data")
     async def get_data(self, ctx):
-        if ctx.author.id in Data.get_owners():
+        if self.is_owner(ctx):
             if self.data == {}:
                 await self.bot.send(ctx.channel, "No users found")
                 return
@@ -130,7 +137,7 @@ class UncleCog(MasterCog):
 
     @command(name="create")
     async def create(self, ctx, profile_id):
-        if ctx.author.id in Data.get_owners():
+        if self.is_owner(ctx):
             self.data[str(profile_id)] = self.get_new_data()
             self.write_data()
             await self.bot.send(ctx.channel, f"created profile for user {profile_id}")
@@ -138,14 +145,14 @@ class UncleCog(MasterCog):
 
     @command(name="set_level", aliases=["setl"])
     async def set_level(self, ctx, index, level):
-        if ctx.author.id in Data.get_owners():
+        if self.is_owner(ctx):
             self.data[str(ctx.author.id)]["levels"][int(index)] = int(level)
             await self.bot.send(ctx.channel, f"level {index} mine's level has been set to {level}")
         return
 
     @command(name="wipe", aliases=["reboot"])
     async def wipe(self, ctx):
-        if ctx.author.id in Data.get_owners():
+        if self.is_owner(ctx):
             self.data = {
                 profile: self.get_new_data()
                 for profile in self.data

@@ -159,7 +159,7 @@ class Framework(Bot):
     async def send(self, channel, msg):
         """
         send a message to a channel\n
-        :param channel: str/int/TextChannel, the channel.
+        :param channel: str/int/Context/TextChannel, the channel.
             None TextChannel types will be casted to TextChannel.
         :param msg: str, the message to send
         """
