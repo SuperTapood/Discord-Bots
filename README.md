@@ -1,8 +1,16 @@
 # Discord-Bots
 
 todo:
-- fix issue where the bot can't recognize
-  user after reading from json file
+
+- fix issue where calling buy calls data or whatever
+- convert string id storing to int
+- complete the cog functions for the master cog from uncle cog
+- add random presence for the bots
+- add context channel fetch to the framework send function
+- add some aliases to commands
+- add is_owner,---- functions
+- fix issue where non default command prefixes don't work (on_message)
+- add setters to framework to set defaults
 
 - tidy and order functions
 - match stubs and original functions

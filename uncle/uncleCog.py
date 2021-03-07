@@ -62,7 +62,7 @@ class UncleCog(MasterCog):
         try:
             # basically self.data[ctx.author.id] but i don't want to store it
             # and don't want pycharm to annoy me
-            self.data.__getitem__(ctx.author.id)
+            self.data.__getitem__(str(ctx.author.id))
             return True
         except KeyError:
             await self.bot.send_bug_report("KeyError",
@@ -87,25 +87,38 @@ class UncleCog(MasterCog):
     def get_level(self, ctx, index):
         return self.data[ctx.author.id]["levels"][index]
 
-    def calculate_price(self, ctx, index):
+    @staticmethod
+    def calculate_price(ctx, index):
         # i need to have some formula here
         return 0
 
-    @command(name="browse")
-    async def browse(self, ctx):
+    async def get_data(self, ctx):
         if await self.assert_user(ctx):
+            return self.data[str(ctx.author.id)]
+        else:
+            return None
+
+    @command(name="browse", aliases=["buy"])
+    async def browse(self, ctx):
+        data = await self.get_data(ctx)
+        if data is not None:
             fields = [
                 (f"Mine {i}, Level {self.get_level(ctx, i)} -> {self.get_level(ctx, i)}",
                  f"{self.calculate_price(ctx, i)}$",
                  i % 2 == 1)
-                for i in range(len(self.data[ctx.author.id]["levels"]))
+                for i in range(len(data["levels"]))
             ]
             await self.bot.generate_send_embed(f"Price catalog for {ctx.author.display_name}", fields, ctx.channel)
+        else:
+            print("AAAAAAAA")
         return
 
     @command(name="data")
     async def get_data(self, ctx):
         if ctx.author.id in Data.get_owners():
+            if self.data == {}:
+                await self.bot.send(ctx.channel, "No users found")
+                return
             for player_id in self.data:
                 info = self.data[player_id]
                 fields = [
@@ -113,6 +126,33 @@ class UncleCog(MasterCog):
                     for key, value in zip(info.keys(), info.values())
                 ]
                 await self.bot.generate_send_embed(f"{player_id} {type(player_id)} data", fields, ctx.channel)
+        return
+
+    # debug functions
+
+    @command(name="create")
+    async def create(self, ctx, profile_id):
+        if ctx.author.id in Data.get_owners():
+            self.data[str(profile_id)] = self.get_new_data()
+            self.write_data()
+            await self.bot.send(ctx.channel, f"created profile for user {profile_id}")
+        return
+
+    @command(name="set_level", aliases=["setl"])
+    async def set_level(self, ctx, index, level):
+        if ctx.author.id in Data.get_owners():
+            self.data[str(ctx.author.id)]["levels"][int(index)] = int(level)
+            await self.bot.send(ctx.channel, f"level {index} mine's level has been set to {level}")
+        return
+
+    @command(name="wipe", aliases=["reboot"])
+    async def wipe(self, ctx):
+        if ctx.author.id in Data.get_owners():
+            self.data = {
+                profile: self.get_new_data()
+                for profile in self.data
+            }
+            await self.bot.send(ctx.channel, "wiped data")
         return
 
     pass
