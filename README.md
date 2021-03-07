@@ -3,6 +3,7 @@
 todo:
 
 - fix issue where calling buy calls data or whatever
+- add help for uncle bot
 - convert string id storing to int
 - complete the cog functions for the master cog from uncle cog
 - add random presence for the bots
