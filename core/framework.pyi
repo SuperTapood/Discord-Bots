@@ -10,6 +10,7 @@ class Framework(Bot):
     guild: Optional[int]
     name: str
     callbacks: dict[str, Callable]
+    prefix: str
 
     def __init__(self, name: Optional[str] = "", intents: Optional[Union[str, Intents]] = Intents.all(),
                  cmd_prefix: Optional[str] = "!") -> None:

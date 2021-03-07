@@ -24,6 +24,7 @@ class Framework(Bot):
         self.token = ""
         self.guild = None
         self.name = name
+        self.prefix = cmd_prefix
         # reset all callbacks
         self.callbacks = {}
         # initialize the master class
@@ -271,7 +272,7 @@ class Framework(Bot):
         # or even check other bots
         if not message.author.bot:
             # if the message is a command
-            if message.clean_content[0] == "!":
+            if message.clean_content[0] == self.prefix:
                 # discord.py will handle this nonsense
                 try:
                     await self.process_commands(message)  # may raise CommandNotFound
