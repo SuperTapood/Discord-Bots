@@ -11,11 +11,13 @@ class UncleCog(MasterCog):
     path = "uncle/data.json"
 
     def __init__(self, bot):
+        print("__init__")
         super().__init__(bot)
         self.data = self.read_data()
         return
 
     def read_data(self):
+        print("read_data")
         try:
             with open(self.path, "r") as file:
                 data = json.loads(file.read())
@@ -24,6 +26,7 @@ class UncleCog(MasterCog):
         return data
 
     def write_data(self, append=True):
+        print("write_data")
         if append:
             new = self.data
             with open(self.path, "w") as file:
@@ -36,6 +39,7 @@ class UncleCog(MasterCog):
 
     @staticmethod
     def get_new_data():
+        print("get_new_data")
         return {
             "money": 100,
             "dps": 0,
@@ -45,6 +49,7 @@ class UncleCog(MasterCog):
 
     @command(name="init")
     async def init(self, ctx):
+        print("init")
         self.data[str(ctx.author.id)] = self.get_new_data()
         self.write_data()
         await self.bot.send(ctx.channel, f"created profile for user {ctx.author.mention}")
@@ -52,6 +57,7 @@ class UncleCog(MasterCog):
 
     @command(name="reset")
     async def reset(self, ctx):
+        print("reset")
         if ctx.author.id in Data.get_owners():
             self.data = {}
             self.write_data()
@@ -59,6 +65,7 @@ class UncleCog(MasterCog):
         return
 
     async def assert_user(self, ctx):
+        print("assert_user")
         try:
             # basically self.data[ctx.author.id] but i don't want to store it
             # and don't want pycharm to annoy me
@@ -75,6 +82,7 @@ class UncleCog(MasterCog):
 
     @command(name="stats", aliases=["userstats", "stat"])
     async def stats(self, ctx):
+        print("stats")
         if await self.assert_user(ctx):
             data = self.data[str(ctx.author.id)]
             fields = [
@@ -85,22 +93,29 @@ class UncleCog(MasterCog):
         return
 
     def get_level(self, ctx, index):
-        return self.data[ctx.author.id]["levels"][index]
+        print("get_level")
+        return self.data[str(ctx.author.id)]["levels"][index]
 
     @staticmethod
     def calculate_price(ctx, index):
+        print("calculate_price")
         # i need to have some formula here
         return 0
 
-    async def get_data(self, ctx):
+    async def get_profile(self, ctx):
+        print("get_data")
         if await self.assert_user(ctx):
+            print("AAA")
             return self.data[str(ctx.author.id)]
         else:
+            print("BBB")
             return None
+        print("CCC")
 
     @command(name="browse", aliases=["buy"])
     async def browse(self, ctx):
-        data = await self.get_data(ctx)
+        print("browse")
+        data = await self.get_profile(ctx)
         if data is not None:
             fields = [
                 (f"Mine {i}, Level {self.get_level(ctx, i)} -> {self.get_level(ctx, i)}",
@@ -115,6 +130,7 @@ class UncleCog(MasterCog):
 
     @command(name="data")
     async def get_data(self, ctx):
+        print("get_data")
         if ctx.author.id in Data.get_owners():
             if self.data == {}:
                 await self.bot.send(ctx.channel, "No users found")
@@ -132,6 +148,7 @@ class UncleCog(MasterCog):
 
     @command(name="create")
     async def create(self, ctx, profile_id):
+        print("create")
         if ctx.author.id in Data.get_owners():
             self.data[str(profile_id)] = self.get_new_data()
             self.write_data()
@@ -140,6 +157,7 @@ class UncleCog(MasterCog):
 
     @command(name="set_level", aliases=["setl"])
     async def set_level(self, ctx, index, level):
+        print("set_level")
         if ctx.author.id in Data.get_owners():
             self.data[str(ctx.author.id)]["levels"][int(index)] = int(level)
             await self.bot.send(ctx.channel, f"level {index} mine's level has been set to {level}")
@@ -147,6 +165,7 @@ class UncleCog(MasterCog):
 
     @command(name="wipe", aliases=["reboot"])
     async def wipe(self, ctx):
+        print("wipe")
         if ctx.author.id in Data.get_owners():
             self.data = {
                 profile: self.get_new_data()
