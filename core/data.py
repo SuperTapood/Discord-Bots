@@ -64,13 +64,13 @@ class Data:
             bot: frame.generate_embed(
                 title=f"{bot}",
                 fields=[
-                (
-                    cmd,
-                    cls.get_documentation(cmd),
-                    True
-                )
-                for i, cmd in enumerate(frame.docs[bot])
-            ]) for bot in frame.docs
+                    (
+                        cmd,
+                        cls.get_documentation(cmd),
+                        True
+                    )
+                    for i, cmd in enumerate(frame.docs[bot])
+                ]) for bot in frame.docs
         }
 
     __one_liners = [
