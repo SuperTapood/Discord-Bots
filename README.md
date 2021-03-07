@@ -2,7 +2,6 @@
 
 todo:
 
-- fix issue where calling buy calls data or whatever
 - automate the help command
 - add help for uncle bot
 - convert string id storing to int (make sure that the read works)
