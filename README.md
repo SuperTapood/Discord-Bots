@@ -2,7 +2,6 @@
 
 todo:
 
-- add help for uncle bot
 - convert string id storing to int (make sure that the read works)
 - complete the cog functions for the master cog from uncle cog
 - add random presence for the bots

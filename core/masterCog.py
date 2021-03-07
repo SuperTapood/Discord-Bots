@@ -47,4 +47,20 @@ class MasterCog(Cog):
     async def browse(self, ctx):
         pass
 
+    @command(name="data")
+    async def get_data(self, ctx):
+        pass
+
+    @command(name="create")
+    async def create(self, ctx, profile_id):
+        pass
+
+    @command(name="set_level", aliases=["setl"])
+    async def set_level(self, ctx, index, level):
+        pass
+
+    @command(name="wipe", aliases=["reboot"])
+    async def wipe(self, ctx):
+        pass
+
     pass
