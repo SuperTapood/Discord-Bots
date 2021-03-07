@@ -55,21 +55,21 @@ class Data:
         """
         get the embeds for the help command \n
         :param frame: Framework, any bot that has inherits from Framework
+            and has the generate_embed method
         :return: dict[string, Embed] the list of help for each bot
         """
-        return {"Providence": frame.generate_embed(
-            title="Help With the Providence bot",
-            fields=[
-                ("!help", cls.get_documentation("help"), True),
-                ("!userinfo", cls.get_documentation("userinfo"), True),
-            ],
-        ), "Jack": frame.generate_embed(
-            title="Help With the Jack bot",
-            fields=[("on_member_join", cls.get_documentation("on_member_join"), True)]
-        ), "Mr. House": frame.generate_embed(
-            title="Help With the Mr. House bot",
-            fields=[("!bj", cls.get_documentation("bj"), True)]
-        )}
+        # frame has a dict with bots and their commands
+        # omg what have i done
+        return {
+            bot: [
+                (
+                    cmd,
+                    cls.get_documentation(cmd),
+                    i % 2 == 0
+                )
+                for i, cmd in enumerate(frame.docs[bot])
+            ] for bot in frame.docs
+        }
 
     __one_liners = [
         "A wild % appeared!",
