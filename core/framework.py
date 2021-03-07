@@ -33,42 +33,6 @@ class Framework(Bot):
                          intents=intents)
         return
 
-    async def invoke_callback(self, callback, *args, **kwargs):
-        """
-        invoke a callback
-        :param callback: str, the name of the function
-        :param args: Any, the arguments to pass into the callback
-        :param kwargs: Any, the keyword arguments to pass into the callback
-        """
-        callf = self.callbacks.get(callback, self.default_callback)
-        try:
-            if args == ():
-                if kwargs == {}:
-                    await callf()
-                else:
-                    await callf(kwargs)
-            else:
-                if kwargs == {}:
-                    await callf(args)
-                else:
-                    await callf(args, kwargs)
-        except TypeError as e:
-            raise BadCallback(callf, callback, e)
-        return
-
-    def get_callbacks(self):
-        """
-        get all of the current callbacks
-        """
-        callbacks = ["on_connect",
-                     "on_disconnect",
-                     "on_ready",
-                     "on_message"]
-        return {
-            c: self.callbacks.get(c, self.default_callback).__name__
-            for c in callbacks
-        }
-
     async def default_callback(self, *args, **kwargs):
         """
         default callback for functions
@@ -77,100 +41,6 @@ class Framework(Bot):
         :return:
         """
         pass
-
-    def set_callback(self, name, callback):
-        """
-        set a callback for a function\n
-        :param name: str, the function's name
-        :param callback: any function, the function that will be called
-        """
-        # this function is where the REAL magic happens
-        # jk, just allowing you to do whatever
-        # please for the love of god don't override
-        # the functions that use the callbacks
-        if name not in self.callbacks:
-            self.callbacks[name] = callback
-        return
-
-    def load_token(self):
-        """
-        load the bot's token
-        """
-        # loads the token used by this specific bot
-        try:
-            assert self.name != ""
-            self.token = get_token(self.name)
-        except AssertionError:
-            # if this is being raised, no name was given
-            raise BotNotNamed()
-        except FileNotFoundError:
-            # if this is being raised, no token file was found
-            raise NoTokenFound(self.name)
-
-    def setup(self):
-        """
-        load the bot's cog
-        """
-        try:
-            self.load_extension(f"{self.name}.{self.name}Cog")
-            print(f"{self.name.capitalize()} Cog loaded!")
-        except ExtensionNotFound:
-            print(f"{self.name.capitalize()} has no cog")
-        return
-
-    def run(self):
-        """
-        load the cog, the token and then boot the bot\n
-        :return: self, for no reason at all
-        """
-        # this is the main function
-        self.setup()
-        self.load_token()
-        # boot this bot up !
-        super().run(self.token, reconnect=True)
-        return self
-
-    # start of helper functions --------------------------------------------------
-
-    async def set_presence(self, activity_type, name, **kwargs):
-        """
-        set the bot's presence\n
-        :param activity_type: str, name of the activity
-        :param name: str, name of the activity itself
-        :param kwargs: dict[str, Any], any other arguments
-            that may be used
-        """
-        if activity_type == "game":
-            activity = discord.Game(name=name)
-        elif activity_type == "stream":
-            activity = discord.Streaming(name=name, url=kwargs["url"])
-        elif activity_type == "listen":
-            activity = discord.Activity(type=discord.ActivityType.listening, name=name)
-        elif activity_type == "watch":
-            activity = discord.Activity(type=discord.ActivityType.watching, name=name)
-        elif activity_type == "custom":
-            activity = discord.Activity(type=discord.ActivityType.custom, name=name)
-        elif activity_type == "competing":
-            activity = discord.Activity(type=discord.ActivityType.competing, name=name)
-        else:
-            raise ActivityNotFound(activity_type)
-        await self.change_presence(status=discord.Status.online, activity=activity)
-        return
-
-    async def send(self, channel, msg):
-        """
-        send a message to a channel\n
-        :param channel: str/int/Context/TextChannel, the channel.
-            None TextChannel types will be casted to TextChannel.
-        :param msg: str, the message to send
-        """
-        # a quick nice helper function to send messages
-        if type(channel) == str:
-            channel = self.get_channel(Data.get_channel(channel))
-        elif type(channel) == int:
-            channel = self.get_channel(channel)
-        await channel.send(msg)
-        return
 
     @staticmethod
     def extract_cmd(msg):
@@ -216,29 +86,56 @@ class Framework(Bot):
             channel = self.get_channel(channel)
         await channel.send(embed=embed)
 
-    async def send_bug_report(self, exc, **kwargs):  # sourcery skip
+    def get_callbacks(self):
         """
-        send a bug report to a channel\n
-        :param exc: str, the reported exception
-        :param kwargs: any arguments
+        get all of the current callbacks
         """
-        # sourcery will be skipped bc this function will grow with more exceptions
-        out = self.get_channel(Data.get_channel("bot bugs"))
-        if exc == "MemberNotFound":
-            msg = f"MemberNotFound: could not find member '{kwargs['name']}' " \
-                  f"in guild '{kwargs['guild']}'. Command was invoked by user {kwargs['author']}"
-        elif exc == "KeyError":
-            msg = f"KeyError: member {kwargs['name']} (id {kwargs['key']}) does not exist in {kwargs['data']}"
-        else:
-            raise ExceptionNotFound(exc)
-        await out.send(msg)
+        callbacks = ["on_connect",
+                     "on_disconnect",
+                     "on_ready",
+                     "on_message"]
+        return {
+            c: self.callbacks.get(c, self.default_callback).__name__
+            for c in callbacks
+        }
+
+    async def invoke_callback(self, callback, *args, **kwargs):
+        """
+        invoke a callback
+        :param callback: str, the name of the function
+        :param args: Any, the arguments to pass into the callback
+        :param kwargs: Any, the keyword arguments to pass into the callback
+        """
+        callf = self.callbacks.get(callback, self.default_callback)
+        try:
+            if args == ():
+                if kwargs == {}:
+                    await callf()
+                else:
+                    await callf(kwargs)
+            else:
+                if kwargs == {}:
+                    await callf(args)
+                else:
+                    await callf(args, kwargs)
+        except TypeError as e:
+            raise BadCallback(callf, callback, e)
         return
 
-    # end of helper functions ----------------------------------------------------
-
-    # start of callback functions ------------------------------------------------
-    # these functions will, unless stated otherwise, attempt to call
-    # callback functions when they are invoked
+    def load_token(self):
+        """
+        load the bot's token
+        """
+        # loads the token used by this specific bot
+        try:
+            assert self.name != ""
+            self.token = get_token(self.name)
+        except AssertionError:
+            # if this is being raised, no name was given
+            raise BotNotNamed()
+        except FileNotFoundError:
+            # if this is being raised, no token file was found
+            raise NoTokenFound(self.name)
 
     async def on_connect(self):
         """
@@ -252,13 +149,6 @@ class Framework(Bot):
         attempt to call the on_disconnect callback
         """
         await self.invoke_callback("on_disconnect")
-        return
-
-    async def on_ready(self):
-        """
-        attempt to call the on_ready callback
-        """
-        await self.invoke_callback("on_ready")
         return
 
     async def on_message(self, message):
@@ -283,4 +173,106 @@ class Framework(Bot):
                 await self.invoke_callback("on_message", message)
         return
 
-    # end of callback functions -------------------------------------------------
+    async def on_ready(self):
+        """
+        attempt to call the on_ready callback
+        """
+        await self.invoke_callback("on_ready")
+        return
+
+    def run(self):
+        """
+        load the cog, the token and then boot the bot\n
+        :return: self, for no reason at all
+        """
+        # this is the main function
+        self.setup()
+        self.load_token()
+        # boot this bot up !
+        super().run(self.token, reconnect=True)
+        return self
+
+    async def send(self, channel, msg):
+        """
+        send a message to a channel\n
+        :param channel: str/int/Context/TextChannel, the channel.
+            None TextChannel types will be casted to TextChannel.
+        :param msg: str, the message to send
+        """
+        # a quick nice helper function to send messages
+        if type(channel) == str:
+            channel = self.get_channel(Data.get_channel(channel))
+        elif type(channel) == int:
+            channel = self.get_channel(channel)
+        await channel.send(msg)
+        return
+
+    async def send_bug_report(self, exc, **kwargs):  # sourcery skip
+        """
+        send a bug report to a channel\n
+        :param exc: str, the reported exception
+        :param kwargs: any arguments
+        """
+        # sourcery will be skipped bc this function will grow with more exceptions
+        out = self.get_channel(Data.get_channel("bot bugs"))
+        if exc == "MemberNotFound":
+            msg = f"MemberNotFound: could not find member '{kwargs['name']}' " \
+                  f"in guild '{kwargs['guild']}'. Command was invoked by user {kwargs['author']}"
+        elif exc == "KeyError":
+            msg = f"KeyError: member {kwargs['name']} (id {kwargs['key']}) does not exist in {kwargs['data']}"
+        else:
+            raise ExceptionNotFound(exc)
+        await out.send(msg)
+        return
+
+    def set_callback(self, name, callback):
+        """
+        set a callback for a function\n
+        :param name: str, the function's name
+        :param callback: any function, the function that will be called
+        """
+        # this function is where the REAL magic happens
+        # jk, just allowing you to do whatever
+        # please for the love of god don't override
+        # the functions that use the callbacks
+        if name not in self.callbacks:
+            self.callbacks[name] = callback
+        return
+
+    async def set_presence(self, activity_type, name, **kwargs):
+        """
+        set the bot's presence\n
+        :param activity_type: str, name of the activity
+        :param name: str, name of the activity itself
+        :param kwargs: dict[str, Any], any other arguments
+            that may be used
+        """
+        if activity_type == "game":
+            activity = discord.Game(name=name)
+        elif activity_type == "stream":
+            activity = discord.Streaming(name=name, url=kwargs["url"])
+        elif activity_type == "listen":
+            activity = discord.Activity(type=discord.ActivityType.listening, name=name)
+        elif activity_type == "watch":
+            activity = discord.Activity(type=discord.ActivityType.watching, name=name)
+        elif activity_type == "custom":
+            activity = discord.Activity(type=discord.ActivityType.custom, name=name)
+        elif activity_type == "competing":
+            activity = discord.Activity(type=discord.ActivityType.competing, name=name)
+        else:
+            raise ActivityNotFound(activity_type)
+        await self.change_presence(status=discord.Status.online, activity=activity)
+        return
+
+    def setup(self):
+        """
+        load the bot's cog
+        """
+        try:
+            self.load_extension(f"{self.name}.{self.name}Cog")
+            print(f"{self.name.capitalize()} Cog loaded!")
+        except ExtensionNotFound:
+            print(f"{self.name.capitalize()} has no cog")
+        return
+
+    pass

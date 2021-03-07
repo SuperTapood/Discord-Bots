@@ -3,15 +3,15 @@ from random import randint
 
 
 class Data:
-    __OWNER_IDS = 550555135869190158
+    __BOTS = ["Providence", "Jack", "House", "Rich Uncle Pennybags"]
 
     @classmethod
-    def get_owners(cls):
+    def get_bots(cls):
         """
-        get the owners of the discord server\n
-        :return: list[int], a list of the owners' id
+        return a list of all the bots in the server\n
+        :return: list[str], the bots
         """
-        return [cls.__OWNER_IDS]
+        return cls.__BOTS
 
     __channels = {"stdout": 784749132073533450,
                   "the test room": 784734923415486474,
@@ -30,25 +30,41 @@ class Data:
             raise NameError(f"name {name} not found in channels dictionary")
         return cls.__channels[name]
 
+    __DOC = {
+        "help": "Provides documentation to the provided bot,\n"
+                "or all of them when none are provided",
+        "userinfo": "Provides info about the provided user,\n"
+                    "or the sender when none are provided",
+        "on_member_join": "The bot will greet any new members\n"
+                          "of the server without being invoked",
+        "bj": "The bot will start to play 21 with you.\n"
+              "while playing, use commands hit and skip to \n"
+              "get more cards or skip the turn accordingly",
+        "init": "creates a new profile for the player. This is\n"
+                "required for the game to work",
+        "stats": "prints out the stats for the player",
+        "browse": "shows the catalog for the player",
+        "buy": "upgrades a specific mine level"
+    }
+
+    @classmethod
+    def get_documentation(cls, cmd):
+        """
+        get the documentation for a specific command\n
+        :param cmd: string, the name of the command
+        :return: string, the documentation of the command
+        """
+        return cls.__DOC[cmd]
+
     __GUILD = 784393032245575721
 
     @classmethod
-    def get_guilds(cls) -> int:
+    def get_guilds(cls):
         """
         a getter for the guild id\n
         :return: int, the guild id
         """
         return cls.__GUILD
-
-    __BOTS = ["Providence", "Jack", "House", "Rich Uncle Pennybags"]
-
-    @classmethod
-    def get_bots(cls):
-        """
-        return a list of all the bots in the server\n
-        :return: list[str], the bots
-        """
-        return cls.__BOTS
 
     @classmethod
     def get_help_embeds(cls, frame):
@@ -91,31 +107,15 @@ class Data:
         """
         return cls.__one_liners.pop(randint(0, len(cls.__one_liners) - 1))
 
-    __DOC = {
-        "help": "Provides documentation to the provided bot,\n"
-                "or all of them when none are provided",
-        "userinfo": "Provides info about the provided user,\n"
-                    "or the sender when none are provided",
-        "on_member_join": "The bot will greet any new members\n"
-                          "of the server without being invoked",
-        "bj": "The bot will start to play 21 with you.\n"
-              "while playing, use commands hit and skip to \n"
-              "get more cards or skip the turn accordingly",
-        "init": "creates a new profile for the player. This is\n"
-                "required for the game to work",
-        "stats": "prints out the stats for the player",
-        "browse": "shows the catalog for the player",
-        "buy": "upgrades a specific mine level"
-    }
+    __OWNER_IDS = 550555135869190158
 
     @classmethod
-    def get_documentation(cls, cmd):
+    def get_owners(cls):
         """
-        get the documentation for a specific command\n
-        :param cmd: string, the name of the command
-        :return: string, the documentation of the command
+        get the owners of the discord server\n
+        :return: list[int], a list of the owners' id
         """
-        return cls.__DOC[cmd]
+        return [cls.__OWNER_IDS]
 
     __ROLES = {
         "God In The Flesh": 787272108207767553,
