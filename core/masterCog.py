@@ -1,5 +1,12 @@
-from discord.ext.commands import Cog
+from discord.ext.commands import Cog, Bot, CommandNotFound
 from discord.ext.commands import command
+
+
+async def on_command_error(ctx, error):
+    # handle any command errors
+    if isinstance(error, CommandNotFound):
+        return
+    raise error
 
 
 class MasterCog(Cog):
@@ -9,58 +16,12 @@ class MasterCog(Cog):
         :param bot: Framework, the bot to be overridden
         """
         self.bot = bot
+
+        # wrap the on_command error to handle
+        # any command errors
+        bot.event(on_command_error)
+
         self.bot.remove_command("help")
         return
-
-    # empty functions to prevent exceptions when using commands
-    # please do not use @override on them
-
-    @command(name="bj")
-    async def play_bj(self, ctx):
-        pass
-
-    @command(name="hit", aliases=["h"])
-    async def hit(self, ctx):
-        pass
-
-    @command(name="skip", aliases=["surrender", "s"])
-    async def skip(self, ctx):
-        pass
-
-    @command(name="help", aliases=["info"])
-    async def show_help(self, ctx, cmd=None):
-        pass
-
-    @command(name="userinfo")
-    async def get_user_info(self, ctx, target=None):
-        pass
-
-    @command(name="init")
-    async def init(self, ctx):
-        pass
-
-    @command(name="reset")
-    async def reset(self, ctx):
-        pass
-
-    @command(name="browse")
-    async def browse(self, ctx):
-        pass
-
-    @command(name="data")
-    async def get_data(self, ctx):
-        pass
-
-    @command(name="create")
-    async def create(self, ctx, profile_id):
-        pass
-
-    @command(name="set_level", aliases=["setl"])
-    async def set_level(self, ctx, index, level):
-        pass
-
-    @command(name="wipe", aliases=["reboot"])
-    async def wipe(self, ctx):
-        pass
 
     pass

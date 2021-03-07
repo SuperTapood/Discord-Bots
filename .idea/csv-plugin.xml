@@ -87,6 +87,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\core\masterCog.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\core\masterCog.pyi">
           <value>
             <Attribute>
