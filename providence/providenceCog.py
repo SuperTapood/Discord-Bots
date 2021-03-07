@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional
 
 from discord import Member
-from discord.ext.commands import command, Context
+from discord.ext.commands import command
 
 from core import MasterCog, Data
 

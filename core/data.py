@@ -59,7 +59,7 @@ class Data:
     __GUILD = 784393032245575721
 
     @classmethod
-    def get_guilds(cls):
+    def get_guild(cls):
         """
         a getter for the guild id\n
         :return: int, the guild id
@@ -107,7 +107,7 @@ class Data:
         """
         return cls.__one_liners.pop(randint(0, len(cls.__one_liners) - 1))
 
-    __OWNER_IDS = 550555135869190158
+    __OWNER_IDS = [550555135869190158]
 
     @classmethod
     def get_owners(cls):
@@ -115,7 +115,7 @@ class Data:
         get the owners of the discord server\n
         :return: list[int], a list of the owners' id
         """
-        return [cls.__OWNER_IDS]
+        return cls.__OWNER_IDS
 
     __ROLES = {
         "God In The Flesh": 787272108207767553,

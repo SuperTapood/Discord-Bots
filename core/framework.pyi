@@ -1,48 +1,18 @@
+# this class is the master class for all bots in the project
 from datetime import datetime
-from typing import Optional, Callable, Union, Any
+from typing import Any, Union, Callable
 
-from discord import Embed, TextChannel, Color, Message, Intents
-from discord.ext.commands import Bot
+from discord import Intents, TextChannel, Color
+from discord.ext.commands import Bot, Context
+
+from core import *
 
 
 class Framework(Bot):
-    token: str
-    guild: Optional[int]
-    name: str
-    callbacks: dict[str, Callable]
-    prefix: str
-
-    def __init__(self, name: Optional[str] = "", intents: Optional[Union[str, Intents]] = Intents.all(),
-                 cmd_prefix: Optional[str] = "!") -> None:
+    def __init__(self, name: str = "", intents: Intents = Intents.all(), cmd_prefix: str = "!"):
         ...
 
-    async def invoke_callback(self, callback: str, *args: Any, **kwargs: Any):
-        ...
-
-    def get_callbacks(self) -> dict[str, str]:
-        ...
-
-    def default_callback(self, *args: tuple[Any], **kwargs: dict[str, Any]):
-        ...
-
-    def set_callback(self, name: str, callback: Callable) -> None:
-        ...
-
-    def load_token(self) -> None:
-        ...
-
-    def setup(self) -> None:
-        ...
-
-    def run(self) -> None:
-        ...
-
-    # start of helper functions --------------------------------------------------
-
-    async def set_presence(self, activity_type: str, name: str, **kwargs: Optional[dict[str, Any]]):
-        ...
-
-    async def send(self, channel: Union[str, int, TextChannel], msg: str):
+    async def default_callback(self, *args: Any, **kwargs: Any):
         ...
 
     @staticmethod
@@ -50,32 +20,55 @@ class Framework(Bot):
         ...
 
     @staticmethod
-    def generate_embed(title: str, fields: list[tuple[str, str, bool]], colour: Color = None,
-                       timestamp: datetime = datetime.utcnow(),
-                       thumbnail_url: str = None) -> Embed:
+    def generate_embed(self, title: str, fields: list[tuple[str, str, bool]],
+                       colour: Color = None, timestamp: datetime = datetime.utcnow(),
+                       thumbnail_url: str = None):
         ...
 
-    async def generate_send_embed(self, title, fields, channel, colour=None, timestamp=datetime.utcnow(),
-                                  thumbnail_url=None):
+    async def generate_send_embed(self, title: str, fields: list[tuple[str, str, bool]],
+                                  channel: Union[str, int, Context, TextChannel],
+                                  colour: Color = None, timestamp: datetime = datetime.utcnow(),
+                                  thumbnail_url: str = None):
         ...
 
-    async def send_bug_report(self, exc: str, **kwargs: Any) -> None:
+    def get_callbacks(self) -> dict[str, str]:
         ...
 
-    # end of helper functions ----------------------------------------------------
-
-    # start of callback functions ------------------------------------------------
-
-    async def on_connect(self) -> None:
+    async def invoke_callback(self, callback: str, *args: Any, **kwargs: Any):
         ...
 
-    async def on_disconnect(self) -> None:
+    def load_token(self):
         ...
 
-    async def on_ready(self) -> None:
+    async def on_connect(self):
         ...
 
-    async def on_message(self, message: Message) -> None:
+    async def on_disconnect(self):
         ...
 
-    # end of callback functions -------------------------------------------------
+    async def on_message(self, message: str):
+        ...
+
+    async def on_ready(self):
+        ...
+
+    def run(self) -> Framework:
+        ...
+
+    async def send(self, channel: Union[str, int, Context, TextChannel],
+                   msg: str):
+        ...
+
+    async def send_bug_report(self, exc: str, **kwargs: Any):  # sourcery skip
+        ...
+
+    def set_callback(self, name: str, callback: Callable):
+        ...
+
+    async def set_presence(self, activity_type: str, name: str, **kwargs: Any):
+        ...
+
+    def setup(self):
+        ...
+
+    pass
