@@ -9,7 +9,8 @@ class House(Framework):
 
     async def ready(self):
         print("ready")
-        await self.set_presence("game", "and always winning")
+        activity = Data.get_activity(self, self.name)
+        await self.set_presence(activity)
         chosen = Data.get_one_liner()
         await self.send("online log", chosen.replace("%", "Mr. House"))
         return

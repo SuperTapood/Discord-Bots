@@ -38,7 +38,8 @@ class Providence(Framework):
         # a callback for when the bot is ready
         print("ready")
         # sets presence for the bot
-        await self.set_presence("game", "with you peasants")
+        activity = Data.get_activity(self, self.name)
+        await self.set_presence(activity)
         # announce thyself
         chosen = Data.get_one_liner()
         # this starts to get annoying while testing

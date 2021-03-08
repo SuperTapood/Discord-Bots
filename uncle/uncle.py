@@ -9,9 +9,10 @@ class Uncle(Framework):
 
     async def ready(self):
         print("ready")
-        await self.set_presence("game", "with billion dollar hedge funds")
+        activity = Data.get_activity(self, self.name)
+        await self.set_presence(activity)
         chosen = Data.get_one_liner()
-        # await self.send("online log", chosen.replace("%", "Rich Uncle Pennybags"))
+        await self.send("online log", chosen.replace("%", "Rich Uncle Pennybags"))
         return
 
     pass

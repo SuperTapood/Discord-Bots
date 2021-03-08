@@ -2,7 +2,7 @@
 from datetime import datetime
 from typing import Any, Union, Callable, Optional
 
-from discord import Intents, TextChannel, Color, Message
+from discord import Intents, TextChannel, Color, Message, Activity
 from discord.ext.commands import Bot, Context
 
 from core import *
@@ -16,6 +16,10 @@ class Framework(Bot):
     callbacks: dict[str, Callable]
 
     def __init__(self, name: str = "", intents: Union[Intents, str] = Intents.all(), cmd_prefix: str = "!"):
+        ...
+
+    @staticmethod
+    def create_activity(activity_type: str, name: str, **kwargs: Any):
         ...
 
     async def default_callback(self, *args: Any, **kwargs: Any):
@@ -71,7 +75,7 @@ class Framework(Bot):
     def set_callback(self, name: str, callback: Callable):
         ...
 
-    async def set_presence(self, activity_type: str, name: str, **kwargs: Any):
+    async def set_presence(self, activity: Activity):
         ...
 
     def setup(self):

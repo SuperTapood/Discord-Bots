@@ -1,11 +1,18 @@
 # class used to store constants and make them read only
+from typing import Any
 
-from discord import Embed
+from discord import Embed, Activity
 
 from core import Framework
 
 
 class Data:
+    __ACTIVITIES: dict[str, list[tuple[Any]]]
+
+    @classmethod
+    def get_activity(cls, frame: Framework, name: str) -> Activity:
+        ...
+
     __BOTS: list[str]
 
     @classmethod

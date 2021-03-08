@@ -3,6 +3,28 @@ from random import randint
 
 
 class Data:
+    __ACTIVITIES = {
+        "house": [
+            ("game", "and always winning"),
+        ],
+        "jack": [
+            ("game", "catch with Ethan")
+        ],
+        "providence": [
+            ("game", "with you peasants")
+        ],
+        "uncle": [
+            ("game", "with billion dollar hedge funds"),
+            ("listen", "to the cries of the poor")
+        ]
+    }
+
+    @classmethod
+    def get_activity(cls, frame, name):
+        chosen = cls.__ACTIVITIES[name].pop(randint(0, len(cls.__ACTIVITIES[name]) - 1))
+        act_type, name = chosen[0], chosen[1]
+        return frame.create_activity(act_type, name, kwargs=chosen[1:])
+
     __BOTS = ["Providence", "Jack", "House", "Rich Uncle Pennybags"]
 
     @classmethod

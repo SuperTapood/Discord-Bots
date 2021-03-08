@@ -33,6 +33,31 @@ class Framework(Bot):
                          intents=intents)
         return
 
+    @staticmethod
+    def create_activity(activity_type, name, **kwargs):
+        """
+        set the bot's presence\n
+        :param activity_type: str, name of the activity
+        :param name: str, name of the activity itself
+        :param kwargs: dict[str, Any], any other arguments
+            that may be used
+        """
+        if activity_type == "game":
+            activity = discord.Game(name=name)
+        elif activity_type == "stream":
+            activity = discord.Streaming(name=name, url=kwargs["url"])
+        elif activity_type == "listen":
+            activity = discord.Activity(type=discord.ActivityType.listening, name=name)
+        elif activity_type == "watch":
+            activity = discord.Activity(type=discord.ActivityType.watching, name=name)
+        elif activity_type == "custom":
+            activity = discord.Activity(type=discord.ActivityType.custom, name=name)
+        elif activity_type == "competing":
+            activity = discord.Activity(type=discord.ActivityType.competing, name=name)
+        else:
+            raise ActivityNotFound(activity_type)
+        return activity
+
     async def default_callback(self, *args, **kwargs):
         """
         default callback for functions
@@ -239,28 +264,7 @@ class Framework(Bot):
             self.callbacks[name] = callback
         return
 
-    async def set_presence(self, activity_type, name, **kwargs):
-        """
-        set the bot's presence\n
-        :param activity_type: str, name of the activity
-        :param name: str, name of the activity itself
-        :param kwargs: dict[str, Any], any other arguments
-            that may be used
-        """
-        if activity_type == "game":
-            activity = discord.Game(name=name)
-        elif activity_type == "stream":
-            activity = discord.Streaming(name=name, url=kwargs["url"])
-        elif activity_type == "listen":
-            activity = discord.Activity(type=discord.ActivityType.listening, name=name)
-        elif activity_type == "watch":
-            activity = discord.Activity(type=discord.ActivityType.watching, name=name)
-        elif activity_type == "custom":
-            activity = discord.Activity(type=discord.ActivityType.custom, name=name)
-        elif activity_type == "competing":
-            activity = discord.Activity(type=discord.ActivityType.competing, name=name)
-        else:
-            raise ActivityNotFound(activity_type)
+    async def set_presence(self, activity):
         await self.change_presence(status=discord.Status.online, activity=activity)
         return
 
