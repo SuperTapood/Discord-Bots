@@ -1,4 +1,4 @@
-import json
+import pickle
 from time import time
 
 from discord.ext.commands import command, Context
@@ -16,22 +16,18 @@ class UncleCog(MasterCog):
         return
 
     def read_data(self):
+        # switched from json to pickle to support int dict keys
         try:
-            with open(self.path, "r") as file:
-                data = json.loads(file.read())
+            with open(self.path, "rb") as handle:
+                data = pickle.load(handle)
         except FileNotFoundError:
-            self.write_data(append=False)
+            self.write_data()
+            data = self.read_data()
         return data
 
-    def write_data(self, append=True):
-        if append:
-            new = self.data
-            with open(self.path, "w") as file:
-                file.write(json.dumps(new))
-            self.data = new
-        else:
-            with open(self.path, "w") as file:
-                file.write(json.dumps(self.data))
+    def write_data(self):
+        with open(self.path, "wb") as handle:
+            pickle.dump(self.data, handle, protocol=pickle.HIGHEST_PROTOCOL)
         return
 
     def is_owner(self, arg):
@@ -52,7 +48,7 @@ class UncleCog(MasterCog):
 
     @command(name="init")
     async def init(self, ctx):
-        self.data[str(ctx.author.id)] = self.get_new_data()
+        self.data[ctx.author.id] = self.get_new_data()
         self.write_data()
         await self.bot.send(ctx.channel, f"created profile for user {ctx.author.mention}")
         return
@@ -69,7 +65,7 @@ class UncleCog(MasterCog):
         try:
             # basically self.data[ctx.author.id] but i don't want to store it
             # and don't want pycharm to annoy me
-            self.data.__getitem__(str(ctx.author.id))
+            self.data.__getitem__(ctx.author.id)
             return True
         except KeyError:
             await self.bot.send_bug_report("KeyError",
@@ -82,8 +78,8 @@ class UncleCog(MasterCog):
 
     @command(name="stats", aliases=["userstats", "stat"])
     async def stats(self, ctx):
-        if await self.assert_user(ctx):
-            data = self.data[str(ctx.author.id)]
+        data = await self.get_profile(ctx)
+        if data is not None:
             fields = [
                 (key, data[key], False) for key in data
             ]
@@ -101,7 +97,7 @@ class UncleCog(MasterCog):
 
     async def get_profile(self, ctx):
         if await self.assert_user(ctx):
-            return self.data[str(ctx.author.id)]
+            return self.data[ctx.author.id]
         else:
             return None
 
