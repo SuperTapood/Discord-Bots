@@ -50,7 +50,7 @@ class UncleCog(MasterCog):
     async def init(self, ctx):
         self.data[ctx.author.id] = self.get_new_data()
         self.write_data()
-        await self.bot.send(ctx.channel, f"created profile for user {ctx.author.mention}")
+        await ctx.send(f"created profile for user {ctx.author.mention}")
         return
 
     @command(name="reset")
@@ -58,7 +58,7 @@ class UncleCog(MasterCog):
         if ctx.author.id in Data.get_owners():
             self.data = {}
             self.write_data()
-            await self.bot.send(ctx.channel, "deleted profiles")
+            await ctx.send("deleted profiles")
         return
 
     async def assert_user(self, ctx):
@@ -72,8 +72,8 @@ class UncleCog(MasterCog):
                                            name=ctx.author.display_name,
                                            key=ctx.author.id,
                                            data=self.data.keys())
-            await self.bot.send(ctx.channel, f"user {ctx.author.display_name} does not exist "
-                                             f"in the current context. Please use command !init first")
+            await ctx.send(f"user {ctx.author.display_name} does not exist "
+                           f"in the current context. Please use command !init first")
         return False
 
     @command(name="stats", aliases=["userstats", "stat"])
@@ -118,7 +118,7 @@ class UncleCog(MasterCog):
     async def get_data(self, ctx):
         if self.is_owner(ctx):
             if self.data == {}:
-                await self.bot.send(ctx.channel, "No users found")
+                await ctx.send("No users found")
                 return
             for player_id in self.data:
                 info = self.data[player_id]
@@ -129,21 +129,19 @@ class UncleCog(MasterCog):
                 await self.bot.generate_send_embed(f"{player_id} {type(player_id)} data", fields, ctx.channel)
         return
 
-    # debug functions
-
     @command(name="create")
     async def create(self, ctx, profile_id):
         if self.is_owner(ctx):
             self.data[str(profile_id)] = self.get_new_data()
             self.write_data()
-            await self.bot.send(ctx.channel, f"created profile for user {profile_id}")
+            await ctx.send(f"created profile for user {profile_id}")
         return
 
     @command(name="set_level", aliases=["setl"])
     async def set_level(self, ctx, index, level):
         if self.is_owner(ctx):
             self.data[str(ctx.author.id)]["levels"][int(index)] = int(level)
-            await self.bot.send(ctx.channel, f"level {index} mine's level has been set to {level}")
+            await ctx.send(f"level {index} mine's level has been set to {level}")
         return
 
     @command(name="wipe", aliases=["reboot"])
@@ -153,7 +151,7 @@ class UncleCog(MasterCog):
                 profile: self.get_new_data()
                 for profile in self.data
             }
-            await self.bot.send(ctx.channel, "wiped data")
+            await ctx.send("wiped data")
         return
 
     pass

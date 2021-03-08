@@ -62,7 +62,7 @@ class HouseCog(MasterCog):
         await ctx.send("What will you do? hit or h /surrender or s")
         return
 
-    @command(name="bj")
+    @command(name="bj", aliases=["play_bj", "blackjack"])
     async def play_bj(self, ctx):
         self.is_playing = True
         await ctx.send("Starting game")
@@ -103,7 +103,7 @@ class HouseCog(MasterCog):
         prob = (exist / total) * 100
         return prob < 25
 
-    @command(name="hit", aliases=["h"])
+    @command(name="hit", aliases=["h", "another"])
     async def hit(self, ctx):
         if self.is_playing:
             self.deal(self.player, self.player_s, 1)
@@ -113,7 +113,7 @@ class HouseCog(MasterCog):
             await self.present_cards(ctx)
         return
 
-    @command(name="skip", aliases=["surrender", "s"])
+    @command(name="skip", aliases=["surrender", "s", "out"])
     async def skip(self, ctx):
         if self.is_playing:
             self.player_skip = True

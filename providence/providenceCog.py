@@ -25,7 +25,7 @@ class ProvCog(MasterCog):
             await ctx.send(embed=Data.get_help_embeds(self.bot)[cmd])
         return
 
-    @command(name="userinfo", aliases=["info"])
+    @command(name="userinfo", aliases=["info", "uinfo", "ui"])
     async def get_user_info(self, ctx, target: str = None):
         if target is None:
             target = ctx.author
