@@ -1,15 +1,21 @@
 # this class is the master class for all bots in the project
 from datetime import datetime
-from typing import Any, Union, Callable
+from typing import Any, Union, Callable, Optional
 
-from discord import Intents, TextChannel, Color
+from discord import Intents, TextChannel, Color, Message
 from discord.ext.commands import Bot, Context
 
 from core import *
 
 
 class Framework(Bot):
-    def __init__(self, name: str = "", intents: Intents = Intents.all(), cmd_prefix: str = "!"):
+    token: str
+    guild: Optional[int]
+    name: str
+    prefix: str
+    callbacks: dict[str, Callable]
+
+    def __init__(self, name: str = "", intents: Union[Intents, str] = Intents.all(), cmd_prefix: str = "!"):
         ...
 
     async def default_callback(self, *args: Any, **kwargs: Any):
@@ -20,7 +26,7 @@ class Framework(Bot):
         ...
 
     @staticmethod
-    def generate_embed(self, title: str, fields: list[tuple[str, str, bool]],
+    def generate_embed(title: str, fields: list[tuple[str, str, bool]],
                        colour: Color = None, timestamp: datetime = datetime.utcnow(),
                        thumbnail_url: str = None):
         ...
@@ -46,7 +52,7 @@ class Framework(Bot):
     async def on_disconnect(self):
         ...
 
-    async def on_message(self, message: str):
+    async def on_message(self, message: Message):
         ...
 
     async def on_ready(self):

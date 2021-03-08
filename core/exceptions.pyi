@@ -22,7 +22,7 @@ class BadCallback(Exception):
     reason: str
 
     def __init__(self, callback: str,
-                 src: str, reason: str):
+                 src: str, reason: Exception):
         ...
 
     def __str__(self) -> str:
