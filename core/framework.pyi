@@ -73,6 +73,9 @@ class Framework(Bot):
     def set_callback(self, name: str, callback: Callable):
         ...
 
+    def set_callbacks(self, **kwargs: Any):
+        ...
+
     async def set_presence(self, activity: Activity):
         ...
 

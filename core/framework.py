@@ -286,6 +286,18 @@ class Framework(Bot):
             self.callbacks[name] = callback
         return
 
+    def set_callbacks(self, **kwargs):
+        """
+        set a callbacks for all functions\n
+        :param kwargs: dict of str, callbacks for the functions
+        """
+        for name in ["on_connect",
+                     "on_disconnect",
+                     "on_ready",
+                     "on_message"]:
+            self.callbacks[name] = kwargs.pop(name, self.default_callback)
+        return
+
     async def set_presence(self, activity):
         await self.change_presence(status=discord.Status.online, activity=activity)
         return
