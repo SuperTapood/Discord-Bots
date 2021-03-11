@@ -2,4 +2,4 @@
 
 todo:
 
-- convert Data class to __getattr__
+- convert dict access throughout data from __getattr__ to __getattr__[key]
