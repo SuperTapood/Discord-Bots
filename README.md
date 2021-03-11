@@ -2,4 +2,5 @@
 
 todo:
 
-- add setters to framework to set defaults
+- convert Data class to __getattr__
+- add callbacks args function

@@ -19,7 +19,7 @@ class BadCallback(Exception):
     __module__: str
     callback: str
     src: str
-    reason: str
+    reason: Exception
 
     def __init__(self, callback: str,
                  src: str, reason: Exception):

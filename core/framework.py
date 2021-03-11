@@ -5,7 +5,6 @@ import discord
 from discord import Intents, Embed
 from discord.ext.commands import Bot, CommandNotFound, ExtensionNotFound
 
-from core import *
 from tokens import get_token
 
 
@@ -41,6 +40,7 @@ class Framework(Bot):
         :param name: str, name of the activity itself
         :param kwargs: dict[str, Any], any other arguments
             that may be used
+        :return: the created activity
         """
         if activity_type == "game":
             activity = discord.Game(name=name)
@@ -60,7 +60,7 @@ class Framework(Bot):
 
     async def default_callback(self, *args, **kwargs):
         """
-        default callback for functions
+        default callback for functions\n
         :param args: Any
         :param kwargs: Any
         :return:
@@ -104,16 +104,29 @@ class Framework(Bot):
 
     async def generate_send_embed(self, title, fields, channel, colour=None, timestamp=datetime.utcnow(),
                                   thumbnail_url=None):
+        """
+        generate an embed using some defaults\n
+        :param title: str, the title of the embed
+        :param fields: list[tuple[str, str, bool]], all
+            the fields to add to the embed ordered like this:
+            (title, text, inline?)
+        :param channel: str, int, or TextChannel, the channel to send the embed to
+        :param colour: optional color, the color of the embed
+        :param timestamp: optional str, the timestamp
+        :param thumbnail_url: optional str, the image to put in the thumbnail
+        :return: Embed, the generated embed
+        """
         embed = self.generate_embed(title, fields, colour, timestamp, thumbnail_url)
         if type(channel) == str:
             channel = self.get_channel(Data.get_channel(channel))
         elif type(channel) == int:
             channel = self.get_channel(channel)
         await channel.send(embed=embed)
+        return
 
     def get_callbacks(self):
         """
-        get all of the current callbacks
+        get all of the current callbacks because reasons
         """
         callbacks = ["on_connect",
                      "on_disconnect",
@@ -126,13 +139,19 @@ class Framework(Bot):
 
     async def invoke_callback(self, callback, *args, **kwargs):
         """
-        invoke a callback
+        invoke a callback\n
         :param callback: str, the name of the function
         :param args: Any, the arguments to pass into the callback
         :param kwargs: Any, the keyword arguments to pass into the callback
         """
+        # this is a tad complicated so pay attention
+        # fetch the callback, or the default one if it doesn't exist
         callf = self.callbacks.get(callback, self.default_callback)
+        # may raise TypeError if the callback is incompatible
         try:
+            # a bit of figuring out what arguments we do or do not need
+            # because lambda: --- cannot take args or kwargs even if
+            # they are empty
             if args == ():
                 if kwargs == {}:
                     await callf()
@@ -161,6 +180,7 @@ class Framework(Bot):
         except FileNotFoundError:
             # if this is being raised, no token file was found
             raise NoTokenFound(self.name)
+        return
 
     async def on_connect(self):
         """
@@ -180,7 +200,7 @@ class Framework(Bot):
         """
         handles any sent messages. if the sent message is a command,
         discord will handle it on its own. else, the on_message callback will be
-        invoked
+        invoked\n
         :param message: str, the message that was sent
         """
         # i don't want an infinite loop of the bot checking itself
@@ -191,11 +211,13 @@ class Framework(Bot):
                 # discord.py will handle this nonsense
                 try:
                     await self.process_commands(message)  # may raise CommandNotFound
+                # if the command wasn't found, it was either a mistake, or
+                # a command for another bot :\
+                # this may not even be necessary after the cog's error handling
                 except CommandNotFound:
                     pass
-            elif "on_message" in self.callbacks:
-                # invoke the callback if the message is not a command
-                await self.invoke_callback("on_message", message)
+            # invoke the callback if the message is not a command
+            await self.invoke_callback("on_message", message)
         return
 
     async def on_ready(self):
@@ -270,7 +292,8 @@ class Framework(Bot):
 
     def setup(self):
         """
-        load the bot's cog
+        load the bot's cog. Used to enforce a naming standard but
+        you can override it yourself if you feel like it
         """
         try:
             self.load_extension(f"{self.name}.{self.name}Cog")

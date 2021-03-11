@@ -3,7 +3,7 @@ from time import time
 
 from discord.ext.commands import command, Context
 
-from core import MasterCog, Data
+from core import Data
 from uncle.debug import Debug
 
 

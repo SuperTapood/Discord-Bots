@@ -5,8 +5,6 @@ from typing import Any, Union, Callable, Optional
 from discord import Intents, TextChannel, Color, Message, Activity
 from discord.ext.commands import Bot, Context
 
-from core import *
-
 
 class Framework(Bot):
     token: str

@@ -51,4 +51,5 @@ class Debug(MasterCog):
             self.write_data()
             await ctx.send("deleted profiles")
         return
+
     pass

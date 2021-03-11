@@ -101,6 +101,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\core\override.py">
+          <value>
+            <Attribute>
+              <option name="separator" value=":" />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\core\override.pyi">
           <value>
             <Attribute>

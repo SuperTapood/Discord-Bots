@@ -3,6 +3,7 @@ from random import randint
 
 
 class Data:
+    # a list of activities bots can pool from
     __ACTIVITIES = {
         "house": [
             ("game", "and always winning"),
@@ -21,6 +22,12 @@ class Data:
 
     @classmethod
     def get_activity(cls, frame, name):
+        """
+        get and create an activity for a framework\n
+        :param frame: Framework, the bot asking for an activity
+        :param name: str, the name of the bot
+        :return: Activity, the chosen activity
+        """
         chosen = cls.__ACTIVITIES[name].pop(randint(0, len(cls.__ACTIVITIES[name]) - 1))
         act_type, name = chosen[0], chosen[1]
         return frame.create_activity(act_type, name, kwargs=chosen[1:])
