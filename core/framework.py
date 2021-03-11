@@ -7,8 +7,12 @@ from discord.ext.commands import Bot, CommandNotFound, ExtensionNotFound
 
 from tokens import get_token
 
+from core import Data
+
 
 class Framework(Bot):
+    docs = []
+
     def __init__(self, name="", intents=Intents.all(), cmd_prefix="!"):
         """
         init the bot\n
@@ -28,7 +32,7 @@ class Framework(Bot):
         self.callbacks = {}
         # initialize the master class
         super().__init__(command_prefix=cmd_prefix,
-                         owner_ids=Data.get_owners(),
+                         owner_ids=Data.owners,
                          intents=intents)
         return
 
@@ -248,7 +252,7 @@ class Framework(Bot):
         """
         # a quick nice helper function to send messages
         if type(channel) == str:
-            channel = self.get_channel(Data.get_channel(channel))
+            channel = self.get_channel(getattr(Data, channel))
         elif type(channel) == int:
             channel = self.get_channel(channel)
         await channel.send(msg)

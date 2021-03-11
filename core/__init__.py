@@ -1,4 +1,4 @@
-from core.data import Data
+from core.data import Data as Dta
 from core.exceptions import (
     OverrideError,
     BotNotNamed,
@@ -7,6 +7,11 @@ from core.exceptions import (
     ExceptionNotFound,
     BadCallback
 )
+Data = Dta()
+
 from core.framework import Framework
 from core.masterCog import MasterCog
 from core.override import override
+
+
+
