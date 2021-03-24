@@ -5,7 +5,7 @@ import discord
 from discord import Intents, Embed
 from discord.ext.commands import Bot, CommandNotFound, ExtensionNotFound
 
-from core.exceptions import NoTokenFound, BotNotNamed
+from core.exceptions import *
 from tokens import get_token
 
 from core import Data
@@ -253,7 +253,7 @@ class Framework(Bot):
         """
         # a quick nice helper function to send messages
         if type(channel) == str:
-            channel = self.get_channel(getattr(Data, channel))
+            channel = self.get_channel(Data.channels[channel])
         elif type(channel) == int:
             channel = self.get_channel(channel)
         await channel.send(msg)

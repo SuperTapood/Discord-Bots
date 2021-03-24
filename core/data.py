@@ -109,8 +109,6 @@ class Data:
             return self.__OWNER_IDS
         elif item == "roles":
             return self.__ROLES
-        elif item in self.__ROLES:
-            return self.__ROLES[item]
         elif item == "one_liner":
             return self.__ONE_LINERS.pop(
                 randint(0, len(self.__ONE_LINERS) - 1))
@@ -118,10 +116,6 @@ class Data:
             return self.__GUILD
         elif item == "channels":
             return self.__CHANNELS
-        elif item in self.__CHANNELS:
-            return self.__CHANNELS[item]
-        elif item in self.__DOC:
-            return self.__DOC
         elif item == "bots":
             return self.__BOTS
         raise AttributeError(f"'Data' object has no attribute {item}")

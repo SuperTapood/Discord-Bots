@@ -41,7 +41,7 @@ class Providence(Framework):
         activity = Data.get_activity(self, self.name)
         await self.set_presence(activity)
         # announce thyself
-        chosen = Data.get_one_liner()
+        chosen = Data.one_liner
         # this starts to get annoying while testing
         await self.send("online log", chosen.replace("%", "Providence"))
         return
