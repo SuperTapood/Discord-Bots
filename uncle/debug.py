@@ -25,13 +25,15 @@ class Debug(MasterCog):
             self.data[str(profile_id)] = self.get_new_data()
             self.write_data()
             await ctx.send(f"created profile for user {profile_id}")
+        self.write_data()
         return
 
     @command(name="set_level", aliases=["setl"])
     async def set_level(self, ctx, index, level):
         if self.is_owner(ctx):
-            self.data[str(ctx.author.id)]["levels"][int(index)] = int(level)
+            self.data[ctx.author.id]["levels"][int(index)] = int(level)
             await ctx.send(f"level {index} mine's level has been set to {level}")
+        self.write_data()
         return
 
     @command(name="wipe", aliases=["reboot"])
@@ -42,6 +44,7 @@ class Debug(MasterCog):
                 for profile in self.data
             }
             await ctx.send("wiped data")
+        self.write_data()
         return
 
     @command(name="reset")
@@ -50,6 +53,7 @@ class Debug(MasterCog):
             self.data = {}
             self.write_data()
             await ctx.send("deleted profiles")
+        self.write_data()
         return
 
     pass

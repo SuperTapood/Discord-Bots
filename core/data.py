@@ -9,14 +9,17 @@ class Data:
             ("game", "and always winning"),
         ],
         "jack": [
-            ("game", "catch with Ethan")
+            ("game", "catch with Ethan"),
         ],
         "providence": [
-            ("game", "with you peasants")
+            ("game", "with you peasants"),
+            ("watch", "all of you dummies from above")
         ],
         "uncle": [
             ("game", "with billion dollar hedge funds"),
-            ("listen", "to the cries of the poor")
+            ("game", "in r/wallstreetbets"),
+            ("listen", "to the cries of the poor"),
+            ("watch", "$GME go brrrr")
         ]
     }
 
@@ -91,6 +94,10 @@ class Data:
     ]
 
     __OWNER_IDS = [550555135869190158]
+
+    @staticmethod
+    def get_owners():
+        return Data.__OWNER_IDS
 
     __ROLES = {
         "God In The Flesh": 787272108207767553,
