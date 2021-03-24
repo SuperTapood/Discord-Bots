@@ -6,6 +6,7 @@ from core import MasterCog
 
 
 class HouseCog(MasterCog):
+    # suits of cards
     suits = {
         0: "♣",
         1: "❤",
@@ -78,6 +79,9 @@ class HouseCog(MasterCog):
         return
 
     def bot_play(self):
+        # idk; it's what it's
+        # the bot basically "counts" cards and
+        # i might upgrade its logic at some point
         player_vision = self.player[1:]
         self_sum = sum(self.bot_cards)
         player_sum = sum(player_vision)

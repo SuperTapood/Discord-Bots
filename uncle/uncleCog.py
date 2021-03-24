@@ -20,13 +20,16 @@ class UncleCog(Debug):
         return
 
     def read_data(self):
-        # switched from json to pickle to support int dict keys
+        # switched from json to pickle to support any type dict keys
         try:
             with open(self.path, "rb") as handle:
                 data = pickle.load(handle)
         except FileNotFoundError:
             self.write_data()
-            data = self.read_data()
+            # this will stay here forever as the world's most stupid line
+            # yes please, I want to re-read an empty json file that is
+            # already in memory please
+            # data = self.read_data()
         return data
 
     def write_data(self):
@@ -35,6 +38,7 @@ class UncleCog(Debug):
         return
 
     def is_owner(self, arg):
+        # check if a message was sent by the owner
         if type(arg) == Context:
             arg = arg.author.id
         else:
