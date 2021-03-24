@@ -5,6 +5,7 @@ import discord
 from discord import Intents, Embed
 from discord.ext.commands import Bot, CommandNotFound, ExtensionNotFound
 
+from core.exceptions import NoTokenFound, BotNotNamed
 from tokens import get_token
 
 from core import Data
